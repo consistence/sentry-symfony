@@ -16,7 +16,6 @@ class Configuration implements \Symfony\Component\Config\Definition\Configuratio
 
 	const DEFAULT_GENERATED_FILES_DIR_NAME = 'sentry';
 
-	const PARAMETER_MODE = 'mode';
 	const PARAMETER_GENERATED_FILES_DIR = 'generated_files_dir';
 	const PARAMETER_METHOD_ANNOTATIONS_MAP = 'method_annotations_map';
 
@@ -44,10 +43,6 @@ class Configuration implements \Symfony\Component\Config\Definition\Configuratio
 
 		$rootNode
 			->children()
-				->enumNode(self::PARAMETER_MODE)
-					->values(SentryIntegrationMode::getAvailableValues())
-					->defaultValue(SentryIntegrationMode::DISABLED)
-					->end()
 				->arrayNode(self::SECTION_GENERATED)
 					->addDefaultsIfNotSet()
 					->children()

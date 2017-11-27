@@ -50,28 +50,12 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 		];
 	}
 
-	public function testDisabledByDefault()
-	{
-		$this->load();
-
-		$this->assertContainerBuilderHasParameter(
-			ConsistenceSentryExtension::CONTAINER_PARAMETER_MODE,
-			'disabled'
-		);
-
-		$this->compile();
-	}
-
 	/**
 	 * @return mixed[][]
 	 */
 	public function defaultGeneratedConfigurationValuesProvider(): array
 	{
 		return [
-			[
-				ConsistenceSentryExtension::CONTAINER_PARAMETER_MODE,
-				'generated',
-			],
 			[
 				ConsistenceSentryExtension::CONTAINER_PARAMETER_GENERATED_TARGET_DIR,
 				$this->getCacheDir() . '/sentry',
@@ -101,9 +85,7 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 	 */
 	public function testDefaultGeneratedConfigurationValues(string $parameterName, $parameterValue)
 	{
-		$this->load([
-			'mode' => 'generated',
-		]);
+		$this->load();
 
 		$this->assertContainerBuilderHasParameter($parameterName, $parameterValue);
 
@@ -113,7 +95,6 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 	public function testConfigureGeneratedFilesDir()
 	{
 		$this->load([
-			'mode' => 'generated',
 			'generated' => [
 				'generated_files_dir' => __DIR__,
 			],
@@ -134,7 +115,6 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 		$this->assertFileNotExists($dir);
 
 		$this->load([
-			'mode' => 'generated',
 			'generated' => [
 				'generated_files_dir' => $dir,
 			],
@@ -160,7 +140,6 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 			Set::class => 'set',
 		];
 		$this->load([
-			'mode' => 'generated',
 			'method_annotations_map' => $methodAnnotationsMap,
 		]);
 

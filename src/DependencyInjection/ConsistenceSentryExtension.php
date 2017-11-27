@@ -16,7 +16,6 @@ class ConsistenceSentryExtension extends \Symfony\Component\HttpKernel\Dependenc
 	const CONTAINER_PARAMETER_ANNOTATION_METHOD_ANNOTATIONS_MAP = 'consistence_sentry.annotation.method_annotations_map';
 	const CONTAINER_PARAMETER_GENERATED_CLASS_MAP_TARGET_FILE = 'consistence_sentry.generated.class_map_target_file';
 	const CONTAINER_PARAMETER_GENERATED_TARGET_DIR = 'consistence_sentry.generated.target_dir';
-	const CONTAINER_PARAMETER_MODE = 'consistence_sentry.mode';
 
 	const CONTAINER_SERVICE_GENERATED_AUTOLOADER = 'consistence_sentry.consistence.sentry.generated.sentry_autoloader';
 
@@ -28,20 +27,17 @@ class ConsistenceSentryExtension extends \Symfony\Component\HttpKernel\Dependenc
 	 */
 	public function loadInternal(array $mergedConfig, ContainerBuilder $container)
 	{
-		$container->setParameter(self::CONTAINER_PARAMETER_MODE, $mergedConfig[Configuration::PARAMETER_MODE]);
 		$yamlFileLoader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/config'));
-		switch ($mergedConfig[Configuration::PARAMETER_MODE]) {
-			case SentryIntegrationMode::GENERATED:
-				$this->loadGenerated($mergedConfig, $container, $yamlFileLoader);
-				break;
-			case SentryIntegrationMode::DISABLED:
-				return;
-			default:
-				// @codeCoverageIgnoreStart
-				// should be unreachable
-				throw new \Exception('Unexpected mode');
-				// @codeCoverageIgnoreEnd
-		}
+
+		$generatedFilesDir = $mergedConfig[Configuration::SECTION_GENERATED][Configuration::PARAMETER_GENERATED_FILES_DIR];
+
+		$this->ensureTargetDirectoryExists($generatedFilesDir);
+
+		$container->setParameter(self::CONTAINER_PARAMETER_GENERATED_TARGET_DIR, $generatedFilesDir);
+		$container->setParameter(
+			self::CONTAINER_PARAMETER_GENERATED_CLASS_MAP_TARGET_FILE,
+			$generatedFilesDir . '/' . self::DEFAULT_GENERATED_CLASS_MAP_TARGET_FILE_NAME
+		);
 
 		$container->setParameter(
 			self::CONTAINER_PARAMETER_ANNOTATION_METHOD_ANNOTATIONS_MAP,
@@ -51,14 +47,8 @@ class ConsistenceSentryExtension extends \Symfony\Component\HttpKernel\Dependenc
 		$yamlFileLoader->load('services.yml');
 	}
 
-	/**
-	 * @param mixed[] $mergedConfig
-	 * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-	 * @param \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $yamlFileLoader
-	 */
-	private function loadGenerated(array $mergedConfig, ContainerBuilder $container, YamlFileLoader $yamlFileLoader)
+	private function ensureTargetDirectoryExists(string $generatedFilesDir)
 	{
-		$generatedFilesDir = $mergedConfig[Configuration::SECTION_GENERATED][Configuration::PARAMETER_GENERATED_FILES_DIR];
 		if (!file_exists($generatedFilesDir)) {
 			if (!@mkdir($generatedFilesDir, 0775, true)) {
 				// @codeCoverageIgnoreStart
@@ -67,13 +57,6 @@ class ConsistenceSentryExtension extends \Symfony\Component\HttpKernel\Dependenc
 				// @codeCoverageIgnoreEnd
 			}
 		}
-		$container->setParameter(self::CONTAINER_PARAMETER_GENERATED_TARGET_DIR, $generatedFilesDir);
-		$container->setParameter(
-			self::CONTAINER_PARAMETER_GENERATED_CLASS_MAP_TARGET_FILE,
-			$generatedFilesDir . '/' . self::DEFAULT_GENERATED_CLASS_MAP_TARGET_FILE_NAME
-		);
-
-		$yamlFileLoader->load('services_generated.yml');
 	}
 
 	/**

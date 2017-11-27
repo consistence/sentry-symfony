@@ -8,6 +8,20 @@ services:
         arguments:
             - '@consistence_sentry.consistence.sentry.sentry_identificator_parser.sentry_identificator_parser'
 
+    consistence_sentry.consistence.sentry.generated.sentry_autoloader:
+        class: Consistence\Sentry\Generated\SentryAutoloader
+        arguments:
+            - '@consistence_sentry.consistence.sentry.generated.sentry_generator'
+            - '%consistence_sentry.generated.class_map_target_file%'
+
+    consistence_sentry.consistence.sentry.generated.sentry_generator:
+        class: Consistence\Sentry\Generated\SentryGenerator
+        arguments:
+            - '@consistence_sentry.consistence.class_finder.class_finder'
+            - '@consistence_sentry.consistence.sentry.metadata_source.metadata_source'
+            - '@consistence_sentry.consistence.sentry.factory.sentry_factory'
+            - '%consistence_sentry.generated.target_dir%'
+
     consistence_sentry.consistence.sentry.metadata_source.annotation.annotation_metadata_source:
         class: Consistence\Sentry\MetadataSource\Annotation\AnnotationMetadataSource
         arguments:
@@ -29,3 +43,12 @@ services:
 
     consistence_sentry.consistence.sentry.symfony_bundle.annotation.var_annotation_provider:
         class: Consistence\Sentry\SymfonyBundle\Annotation\VarAnnotationProvider
+
+    consistence_sentry.consistence.sentry.symfony_bundle.generated.generate_sentry_command:
+        class: Consistence\Sentry\SymfonyBundle\Generated\GenerateSentryCommand
+        arguments:
+            - '@consistence_sentry.consistence.sentry.generated.sentry_autoloader'
+            - '%consistence_sentry.generated.target_dir%'
+        tags:
+            -
+                name: console.command
