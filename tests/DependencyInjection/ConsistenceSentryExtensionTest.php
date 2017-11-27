@@ -53,7 +53,7 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 	/**
 	 * @return mixed[][]
 	 */
-	public function defaultGeneratedConfigurationValuesProvider(): array
+	public function defaultConfigurationValuesProvider(): array
 	{
 		return [
 			[
@@ -78,12 +78,12 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 	}
 
 	/**
-	 * @dataProvider defaultGeneratedConfigurationValuesProvider
+	 * @dataProvider defaultConfigurationValuesProvider
 	 *
 	 * @param string $parameterName
 	 * @param mixed $parameterValue
 	 */
-	public function testDefaultGeneratedConfigurationValues(string $parameterName, $parameterValue)
+	public function testDefaultConfigurationValues(string $parameterName, $parameterValue)
 	{
 		$this->load();
 
@@ -95,9 +95,7 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 	public function testConfigureGeneratedFilesDir()
 	{
 		$this->load([
-			'generated' => [
-				'generated_files_dir' => __DIR__,
-			],
+			'generated_files_dir' => __DIR__,
 		]);
 
 		$this->assertContainerBuilderHasParameter(
@@ -115,9 +113,7 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 		$this->assertFileNotExists($dir);
 
 		$this->load([
-			'generated' => [
-				'generated_files_dir' => $dir,
-			],
+			'generated_files_dir' => $dir,
 		]);
 
 		$this->assertContainerBuilderHasParameter(

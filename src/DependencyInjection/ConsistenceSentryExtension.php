@@ -29,7 +29,7 @@ class ConsistenceSentryExtension extends \Symfony\Component\HttpKernel\Dependenc
 	{
 		$yamlFileLoader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/config'));
 
-		$generatedFilesDir = $mergedConfig[Configuration::SECTION_GENERATED][Configuration::PARAMETER_GENERATED_FILES_DIR];
+		$generatedFilesDir = $mergedConfig[Configuration::PARAMETER_GENERATED_FILES_DIR];
 
 		$this->ensureTargetDirectoryExists($generatedFilesDir);
 
