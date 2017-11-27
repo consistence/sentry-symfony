@@ -11,7 +11,7 @@
 	],
 	"require": {
 		"consistence/class-finder-implementation": "1.0",
-		"consistence/sentry": "~0.14",
+		"consistence/sentry": "~0.15",
 		"doctrine/annotations": "~1.2",
 		"symfony/config": "~3.0",
 		"symfony/console": "~3.0",

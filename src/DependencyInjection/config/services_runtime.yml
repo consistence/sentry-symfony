@@ -1,6 +1,0 @@
-services:
-    consistence.sentry.runtime.runtime_helper:
-        class: Consistence\Sentry\Runtime\RuntimeHelper
-        arguments:
-            - '@consistence_sentry.consistence.sentry.metadata_source.metadata_source'
-            - '@consistence_sentry.consistence.sentry.factory.sentry_factory'

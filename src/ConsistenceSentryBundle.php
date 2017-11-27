@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Consistence\Sentry\SymfonyBundle;
 
-use Consistence\Sentry\Runtime\RuntimeHelperBridge;
 use Consistence\Sentry\SymfonyBundle\DependencyInjection\ConsistenceSentryExtension;
 use Consistence\Sentry\SymfonyBundle\DependencyInjection\SentryIntegrationMode;
 
@@ -22,9 +21,6 @@ class ConsistenceSentryBundle extends \Symfony\Component\HttpKernel\Bundle\Bundl
 				if ($sentryAutoloader->isClassMapReady()) {
 					$sentryAutoloader->register();
 				}
-				break;
-			case SentryIntegrationMode::RUNTIME:
-				RuntimeHelperBridge::setHelper($this->container->get(ConsistenceSentryExtension::CONTAINER_SERVICE_RUNTIME_HELPER));
 				break;
 			case SentryIntegrationMode::DISABLED:
 				return;

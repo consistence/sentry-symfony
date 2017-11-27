@@ -110,46 +110,6 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 		$this->compile();
 	}
 
-	/**
-	 * @return mixed[][]
-	 */
-	public function defaultRuntimeConfigurationValuesProvider(): array
-	{
-		return [
-			[
-				ConsistenceSentryExtension::CONTAINER_PARAMETER_MODE,
-				'runtime',
-			],
-			[
-				ConsistenceSentryExtension::CONTAINER_PARAMETER_ANNOTATION_METHOD_ANNOTATIONS_MAP,
-				[
-					Add::class => 'add',
-					Contains::class => 'contains',
-					Get::class => 'get',
-					Remove::class => 'remove',
-					Set::class => 'set',
-				],
-			],
-		];
-	}
-
-	/**
-	 * @dataProvider defaultRuntimeConfigurationValuesProvider
-	 *
-	 * @param string $parameterName
-	 * @param mixed $parameterValue
-	 */
-	public function testDefaultRuntimeConfigurationValues(string $parameterName, $parameterValue)
-	{
-		$this->load([
-			'mode' => 'runtime',
-		]);
-
-		$this->assertContainerBuilderHasParameter($parameterName, $parameterValue);
-
-		$this->compile();
-	}
-
 	public function testConfigureGeneratedFilesDir()
 	{
 		$this->load([

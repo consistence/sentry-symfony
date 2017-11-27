@@ -19,7 +19,6 @@ class ConsistenceSentryExtension extends \Symfony\Component\HttpKernel\Dependenc
 	const CONTAINER_PARAMETER_MODE = 'consistence_sentry.mode';
 
 	const CONTAINER_SERVICE_GENERATED_AUTOLOADER = 'consistence_sentry.consistence.sentry.generated.sentry_autoloader';
-	const CONTAINER_SERVICE_RUNTIME_HELPER = 'consistence_sentry.consistence.sentry.runtime.runtime_helper';
 
 	const DEFAULT_GENERATED_CLASS_MAP_TARGET_FILE_NAME = '_classMap.php';
 
@@ -34,9 +33,6 @@ class ConsistenceSentryExtension extends \Symfony\Component\HttpKernel\Dependenc
 		switch ($mergedConfig[Configuration::PARAMETER_MODE]) {
 			case SentryIntegrationMode::GENERATED:
 				$this->loadGenerated($mergedConfig, $container, $yamlFileLoader);
-				break;
-			case SentryIntegrationMode::RUNTIME:
-				$this->loadRuntime($yamlFileLoader);
 				break;
 			case SentryIntegrationMode::DISABLED:
 				return;
@@ -78,14 +74,6 @@ class ConsistenceSentryExtension extends \Symfony\Component\HttpKernel\Dependenc
 		);
 
 		$yamlFileLoader->load('services_generated.yml');
-	}
-
-	/**
-	 * @param \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $yamlFileLoader
-	 */
-	private function loadRuntime(YamlFileLoader $yamlFileLoader)
-	{
-		$yamlFileLoader->load('services_runtime.yml');
 	}
 
 	/**

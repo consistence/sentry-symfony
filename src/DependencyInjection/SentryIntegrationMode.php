@@ -8,7 +8,6 @@ class SentryIntegrationMode extends \Consistence\Enum\Enum
 {
 
 	const GENERATED = 'generated';
-	const RUNTIME = 'runtime';
 	const DISABLED = 'disabled';
 
 }
