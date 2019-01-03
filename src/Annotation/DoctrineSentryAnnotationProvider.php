@@ -72,12 +72,7 @@ class DoctrineSentryAnnotationProvider extends \Consistence\ObjectPrototype impl
 		);
 	}
 
-	/**
-	 * @param \ReflectionProperty $property
-	 * @param string $annotationName
-	 * @return object
-	 */
-	private function findAnnotation(ReflectionProperty $property, string $annotationName)
+	private function findAnnotation(ReflectionProperty $property, string $annotationName): object
 	{
 		foreach ($this->annotationMap as $class => $name) {
 			if ($name !== $annotationName) {
@@ -92,12 +87,7 @@ class DoctrineSentryAnnotationProvider extends \Consistence\ObjectPrototype impl
 		throw new \Consistence\Annotation\AnnotationNotFoundException($annotationName, $property);
 	}
 
-	/**
-	 * @param string $annotationName
-	 * @param object $annotation
-	 * @return \Consistence\Annotation\Annotation
-	 */
-	private function convertAnnotation(string $annotationName, $annotation): Annotation
+	private function convertAnnotation(string $annotationName, object $annotation): Annotation
 	{
 		$fields = [];
 		foreach ($annotation as $name => $value) {
