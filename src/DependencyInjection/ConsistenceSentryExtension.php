@@ -11,21 +11,21 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 class ConsistenceSentryExtension extends \Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension
 {
 
-	const ALIAS = 'consistence_sentry';
+	public const ALIAS = 'consistence_sentry';
 
-	const CONTAINER_PARAMETER_ANNOTATION_METHOD_ANNOTATIONS_MAP = 'consistence_sentry.annotation.method_annotations_map';
-	const CONTAINER_PARAMETER_GENERATED_CLASS_MAP_TARGET_FILE = 'consistence_sentry.generated.class_map_target_file';
-	const CONTAINER_PARAMETER_GENERATED_TARGET_DIR = 'consistence_sentry.generated.target_dir';
+	public const CONTAINER_PARAMETER_ANNOTATION_METHOD_ANNOTATIONS_MAP = 'consistence_sentry.annotation.method_annotations_map';
+	public const CONTAINER_PARAMETER_GENERATED_CLASS_MAP_TARGET_FILE = 'consistence_sentry.generated.class_map_target_file';
+	public const CONTAINER_PARAMETER_GENERATED_TARGET_DIR = 'consistence_sentry.generated.target_dir';
 
-	const CONTAINER_SERVICE_GENERATED_AUTOLOADER = 'consistence_sentry.consistence.sentry.generated.sentry_autoloader';
+	public const CONTAINER_SERVICE_GENERATED_AUTOLOADER = 'consistence_sentry.consistence.sentry.generated.sentry_autoloader';
 
-	const DEFAULT_GENERATED_CLASS_MAP_TARGET_FILE_NAME = '_classMap.php';
+	public const DEFAULT_GENERATED_CLASS_MAP_TARGET_FILE_NAME = '_classMap.php';
 
 	/**
 	 * @param mixed[] $mergedConfig
 	 * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
 	 */
-	public function loadInternal(array $mergedConfig, ContainerBuilder $container)
+	public function loadInternal(array $mergedConfig, ContainerBuilder $container): void
 	{
 		$yamlFileLoader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/config'));
 
@@ -47,7 +47,7 @@ class ConsistenceSentryExtension extends \Symfony\Component\HttpKernel\Dependenc
 		$yamlFileLoader->load('services.yml');
 	}
 
-	private function ensureTargetDirectoryExists(string $generatedFilesDir)
+	private function ensureTargetDirectoryExists(string $generatedFilesDir): void
 	{
 		if (!file_exists($generatedFilesDir)) {
 			if (!@mkdir($generatedFilesDir, 0775, true)) {

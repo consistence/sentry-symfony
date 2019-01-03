@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class GenerateSentryCommand extends \Symfony\Component\Console\Command\Command
 {
 
-	const NAME = 'consistence:sentry:generate';
+	public const NAME = 'consistence:sentry:generate';
 
 	/** @var \Consistence\Sentry\Generated\SentryAutoloader */
 	private $sentryAutoloader;
@@ -29,7 +29,7 @@ class GenerateSentryCommand extends \Symfony\Component\Console\Command\Command
 		$this->generatedTargetDir = $generatedTargetDir;
 	}
 
-	protected function configure()
+	protected function configure(): void
 	{
 		$this->setName(self::NAME);
 		$description = 'Generate classes with Sentry methods';
@@ -37,7 +37,7 @@ class GenerateSentryCommand extends \Symfony\Component\Console\Command\Command
 		$this->setHelp($description);
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): void
 	{
 		if ($this->sentryAutoloader->isClassMapReady()) {
 			throw new \Exception('<error>Class map already exists, remove it manually or call bin/console cache:clear</error>');

@@ -12,7 +12,7 @@ use ReflectionProperty;
 class SymfonySentryAnnotationProviderIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
-	public function testGetAnnotationWithNoParams()
+	public function testGetAnnotationWithNoParams(): void
 	{
 		$annotationProvider = $this->createAnnotationProvider();
 		$property = new ReflectionProperty(Foo::class, 'noParams');
@@ -24,7 +24,7 @@ class SymfonySentryAnnotationProviderIntegrationTest extends \PHPUnit\Framework\
 		$this->assertEmpty($annotation->getFields());
 	}
 
-	public function testGetAnnotationWithFields()
+	public function testGetAnnotationWithFields(): void
 	{
 		$annotationProvider = $this->createAnnotationProvider();
 		$property = new ReflectionProperty(Foo::class, 'withFields');
@@ -43,7 +43,7 @@ class SymfonySentryAnnotationProviderIntegrationTest extends \PHPUnit\Framework\
 		$this->assertSame('private', $fields[1]->getValue());
 	}
 
-	public function testGetAnnotationNotFound()
+	public function testGetAnnotationNotFound(): void
 	{
 		$annotationProvider = $this->createAnnotationProvider();
 		$property = new ReflectionProperty(Foo::class, 'noParams');
@@ -53,7 +53,7 @@ class SymfonySentryAnnotationProviderIntegrationTest extends \PHPUnit\Framework\
 		$annotationProvider->getPropertyAnnotation($property, 'foo');
 	}
 
-	public function testGetAnnotations()
+	public function testGetAnnotations(): void
 	{
 		$annotationProvider = $this->createAnnotationProvider();
 		$property = new ReflectionProperty(Foo::class, 'multiple');
@@ -74,7 +74,7 @@ class SymfonySentryAnnotationProviderIntegrationTest extends \PHPUnit\Framework\
 		$this->assertSame('fooName', $fields[0]->getValue());
 	}
 
-	public function testGetAnnotationsNotFound()
+	public function testGetAnnotationsNotFound(): void
 	{
 		$annotationProvider = $this->createAnnotationProvider();
 		$property = new ReflectionProperty(Foo::class, 'noParams');
@@ -82,7 +82,7 @@ class SymfonySentryAnnotationProviderIntegrationTest extends \PHPUnit\Framework\
 		$this->assertEmpty($annotationProvider->getPropertyAnnotations($property, 'foo'));
 	}
 
-	public function testUnstructuredAnnotation()
+	public function testUnstructuredAnnotation(): void
 	{
 		$annotationProvider = $this->createAnnotationProvider();
 		$property = new ReflectionProperty(Foo::class, 'noParams');
@@ -94,10 +94,7 @@ class SymfonySentryAnnotationProviderIntegrationTest extends \PHPUnit\Framework\
 		$this->assertEmpty($annotation->getFields());
 	}
 
-	/**
-	 * @return \Consistence\Sentry\SymfonyBundle\Annotation\DoctrineSentryAnnotationProvider
-	 */
-	private function createAnnotationProvider()
+	private function createAnnotationProvider(): DoctrineSentryAnnotationProvider
 	{
 		return new DoctrineSentryAnnotationProvider(
 			new AnnotationReader(),

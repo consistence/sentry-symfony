@@ -38,7 +38,7 @@ class VarAnnotationProvider extends \Consistence\ObjectPrototype implements \Con
 	 * @param string $annotationName
 	 * @return \Consistence\Annotation\Annotation[]
 	 */
-	public function getPropertyAnnotations(ReflectionProperty $property, string $annotationName)
+	public function getPropertyAnnotations(ReflectionProperty $property, string $annotationName): array
 	{
 		return [];
 	}

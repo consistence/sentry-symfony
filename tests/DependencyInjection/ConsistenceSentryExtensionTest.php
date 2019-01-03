@@ -13,7 +13,7 @@ use Consistence\Sentry\SymfonyBundle\Annotation\Set;
 class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase
 {
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 		$this->setParameter('kernel.root_dir', $this->getRootDir());
@@ -83,7 +83,7 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 	 * @param string $parameterName
 	 * @param mixed $parameterValue
 	 */
-	public function testDefaultConfigurationValues(string $parameterName, $parameterValue)
+	public function testDefaultConfigurationValues(string $parameterName, $parameterValue): void
 	{
 		$this->load();
 
@@ -92,7 +92,7 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 		$this->compile();
 	}
 
-	public function testConfigureGeneratedFilesDir()
+	public function testConfigureGeneratedFilesDir(): void
 	{
 		$this->load([
 			'generated_files_dir' => __DIR__,
@@ -106,7 +106,7 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 		$this->compile();
 	}
 
-	public function testConfigureGeneratedFilesDirNonExistingDirectoryCreatesDir()
+	public function testConfigureGeneratedFilesDirNonExistingDirectoryCreatesDir(): void
 	{
 		$dir = $this->getTempDir() . '/testConfigureGeneratedFilesDirNonExistingDirectoryCreatesDir';
 		@rmdir($dir);
@@ -129,7 +129,7 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 		$this->compile();
 	}
 
-	public function testConfigureMethodAnnotationMap()
+	public function testConfigureMethodAnnotationMap(): void
 	{
 		$methodAnnotationsMap = [
 			Get::class => 'get',

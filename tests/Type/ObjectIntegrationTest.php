@@ -13,7 +13,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @return \Consistence\Sentry\SymfonyBundle\Type\Foo[][]
 	 */
-	public function fooProvider()
+	public function fooProvider(): array
 	{
 		$generator = new SentryDataGenerator();
 		$generator->generate('Foo');
@@ -28,7 +28,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testGetUninitialized(Foo $foo)
+	public function testGetUninitialized(Foo $foo): void
 	{
 		$this->assertNull($foo->getPublishDate());
 	}
@@ -38,7 +38,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testSet(Foo $foo)
+	public function testSet(Foo $foo): void
 	{
 		$publishDate = new DateTimeImmutable();
 		$foo->setPublishDate($publishDate);
@@ -50,7 +50,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testSetNullToNotNullable(Foo $foo)
+	public function testSetNullToNotNullable(Foo $foo): void
 	{
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
 		$this->expectExceptionMessage('DateTimeImmutable expected');
@@ -63,7 +63,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testSetScalarType(Foo $foo)
+	public function testSetScalarType(Foo $foo): void
 	{
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
 		$this->expectExceptionMessage('DateTimeImmutable expected');
@@ -76,7 +76,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testSetInvalidType(Foo $foo)
+	public function testSetInvalidType(Foo $foo): void
 	{
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
 		$this->expectExceptionMessage('DateTimeImmutable expected');
@@ -89,7 +89,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testNullableSetScalarType(Foo $foo)
+	public function testNullableSetScalarType(Foo $foo): void
 	{
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
 		$this->expectExceptionMessage('DateTimeImmutable|null expected');
@@ -102,7 +102,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testNullableSetInvalidType(Foo $foo)
+	public function testNullableSetInvalidType(Foo $foo): void
 	{
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
 		$this->expectExceptionMessage('DateTimeImmutable|null expected');
@@ -115,7 +115,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testAcceptSubtypes(Foo $foo)
+	public function testAcceptSubtypes(Foo $foo): void
 	{
 		$immutable = new DateTimeImmutable();
 		$foo->setDateTimeInterface($immutable);

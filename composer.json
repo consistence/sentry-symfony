@@ -10,6 +10,7 @@
 		}
 	],
 	"require": {
+		"php": "~7.1",
 		"consistence/class-finder-implementation": "1.0",
 		"consistence/sentry": "~0.15",
 		"doctrine/annotations": "~1.2",

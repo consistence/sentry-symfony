@@ -39,7 +39,7 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param string $value
 	 */
-	public function testGetVarAnnotationValue(string $value)
+	public function testGetVarAnnotationValue(string $value): void
 	{
 		$docComment = sprintf('/**
 			 * @var %s
@@ -69,7 +69,7 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param string $value
 	 */
-	public function testGetVarAnnotationValueInline(string $value)
+	public function testGetVarAnnotationValueInline(string $value): void
 	{
 		$docComment = sprintf('/** @var %s */', $value);
 
@@ -92,7 +92,7 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 		$this->assertEmpty($annotation->getFields());
 	}
 
-	public function testVarAnnotationDoesNotExist()
+	public function testVarAnnotationDoesNotExist(): void
 	{
 		try {
 			$docComment = '/**
@@ -131,7 +131,7 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	public function testMalformedVarAnnotation()
+	public function testMalformedVarAnnotation(): void
 	{
 		try {
 			$docComment = '/**
@@ -170,7 +170,7 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	public function testSupportsOnlyVarAnnotation()
+	public function testSupportsOnlyVarAnnotation(): void
 	{
 		try {
 			$property = $this
@@ -200,7 +200,7 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 		}
 	}
 
-	public function testDoesNotSupportGetAnnotations()
+	public function testDoesNotSupportGetAnnotations(): void
 	{
 		$property = $this
 			->getMockBuilder(ReflectionProperty::class)

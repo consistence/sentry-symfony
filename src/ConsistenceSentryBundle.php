@@ -12,7 +12,7 @@ class ConsistenceSentryBundle extends \Symfony\Component\HttpKernel\Bundle\Bundl
 	/**
 	 * @codeCoverageIgnore changes global state
 	 */
-	public function boot()
+	public function boot(): void
 	{
 		$sentryAutoloader = $this->container->get(ConsistenceSentryExtension::CONTAINER_SERVICE_GENERATED_AUTOLOADER);
 		if ($sentryAutoloader->isClassMapReady()) {

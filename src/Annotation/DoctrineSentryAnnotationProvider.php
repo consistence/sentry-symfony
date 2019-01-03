@@ -53,7 +53,7 @@ class DoctrineSentryAnnotationProvider extends \Consistence\ObjectPrototype impl
 	 * @param string $annotationName
 	 * @return \Consistence\Annotation\Annotation[]
 	 */
-	public function getPropertyAnnotations(ReflectionProperty $property, string $annotationName)
+	public function getPropertyAnnotations(ReflectionProperty $property, string $annotationName): array
 	{
 		$annotations = $this->annotationReader->getPropertyAnnotations($property);
 

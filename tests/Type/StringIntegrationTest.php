@@ -25,7 +25,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testGet(Foo $foo)
+	public function testGet(Foo $foo): void
 	{
 		$this->assertSame('testName', $foo->getName());
 	}
@@ -35,7 +35,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testGetUninitializedString(Foo $foo)
+	public function testGetUninitializedString(Foo $foo): void
 	{
 		$this->assertNull($foo->getDescription());
 	}
@@ -45,7 +45,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testSet(Foo $foo)
+	public function testSet(Foo $foo): void
 	{
 		$foo->setName('fooBar');
 		$this->assertSame('fooBar', $foo->getName());
@@ -56,7 +56,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testSetNullToNotNullable(Foo $foo)
+	public function testSetNullToNotNullable(Foo $foo): void
 	{
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
 
@@ -68,7 +68,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testSetEmptyString(Foo $foo)
+	public function testSetEmptyString(Foo $foo): void
 	{
 		$foo->setName('');
 		$this->assertSame('', $foo->getName());
@@ -79,7 +79,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testSetStringZero(Foo $foo)
+	public function testSetStringZero(Foo $foo): void
 	{
 		$foo->setName('0');
 		$this->assertSame('0', $foo->getName());
@@ -90,7 +90,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testSetWhitespaceString(Foo $foo)
+	public function testSetWhitespaceString(Foo $foo): void
 	{
 		$foo->setName('    ');
 		$this->assertSame('    ', $foo->getName());
@@ -101,7 +101,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testSetInvalidType(Foo $foo)
+	public function testSetInvalidType(Foo $foo): void
 	{
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
 		$this->expectExceptionMessage('string expected');
@@ -114,7 +114,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testNullableSetEmptyString(Foo $foo)
+	public function testNullableSetEmptyString(Foo $foo): void
 	{
 		$foo->setDescription('');
 		$this->assertSame('', $foo->getDescription());
@@ -126,7 +126,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testNullableSetWhitespaceString(Foo $foo)
+	public function testNullableSetWhitespaceString(Foo $foo): void
 	{
 		$foo->setDescription('    ');
 		$this->assertSame('    ', $foo->getDescription());
@@ -137,7 +137,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testNullableSetInvalidType(Foo $foo)
+	public function testNullableSetInvalidType(Foo $foo): void
 	{
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
 		$this->expectExceptionMessage('string|null expected');
@@ -150,7 +150,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testCustomNameGetAndSet(Foo $foo)
+	public function testCustomNameGetAndSet(Foo $foo): void
 	{
 		$foo->setMy('foo');
 		$this->assertSame('foo', $foo->getMy());
@@ -161,7 +161,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testCallPrivateFromPublic(Foo $foo)
+	public function testCallPrivateFromPublic(Foo $foo): void
 	{
 		$foo->setPublic('foo');
 		$this->assertSame('foo', $foo->getPrivate());

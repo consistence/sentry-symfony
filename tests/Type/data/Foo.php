@@ -90,7 +90,7 @@ class Foo extends \Consistence\Sentry\SentryObject
 		$this->eventDates = [];
 	}
 
-	public function setPublic(string $string)
+	public function setPublic(string $string): void
 	{
 		$this->setPrivate($string);
 	}

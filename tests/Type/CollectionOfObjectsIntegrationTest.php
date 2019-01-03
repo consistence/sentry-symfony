@@ -13,7 +13,7 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @return \Consistence\Sentry\SymfonyBundle\Type\Foo[][]
 	 */
-	public function fooProvider()
+	public function fooProvider(): array
 	{
 		$generator = new SentryDataGenerator();
 		$generator->generate('Foo');
@@ -28,7 +28,7 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testGetEmpty(Foo $foo)
+	public function testGetEmpty(Foo $foo): void
 	{
 		$this->assertEmpty($foo->getEventDates());
 	}
@@ -38,7 +38,7 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testSetAndGet(Foo $foo)
+	public function testSetAndGet(Foo $foo): void
 	{
 		$eventDates = [
 			new DateTimeImmutable(),
@@ -53,7 +53,7 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testAdd(Foo $foo)
+	public function testAdd(Foo $foo): void
 	{
 		$date = new DateTimeImmutable();
 		$foo->addEventDate($date);
@@ -65,7 +65,7 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testContains(Foo $foo)
+	public function testContains(Foo $foo): void
 	{
 		$today = new DateTimeImmutable();
 		$tomorrow = new DateTimeImmutable('tomorrow');
@@ -85,7 +85,7 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testRemove(Foo $foo)
+	public function testRemove(Foo $foo): void
 	{
 		$today = new DateTimeImmutable();
 		$tomorrow = new DateTimeImmutable('tomorrow');
@@ -106,7 +106,7 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testSetInvalidCollectionType(Foo $foo)
+	public function testSetInvalidCollectionType(Foo $foo): void
 	{
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
 		$this->expectExceptionMessage('array expected');
@@ -119,7 +119,7 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testSetInvalidItemType(Foo $foo)
+	public function testSetInvalidItemType(Foo $foo): void
 	{
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
 		$this->expectExceptionMessage('DateTimeInterface expected');
@@ -132,7 +132,7 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testSetNullValue(Foo $foo)
+	public function testSetNullValue(Foo $foo): void
 	{
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
 		$this->expectExceptionMessage('DateTimeInterface expected');
@@ -145,7 +145,7 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testAddInvalidItemType(Foo $foo)
+	public function testAddInvalidItemType(Foo $foo): void
 	{
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
 		$this->expectExceptionMessage('DateTimeInterface expected');
@@ -158,7 +158,7 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testAddNull(Foo $foo)
+	public function testAddNull(Foo $foo): void
 	{
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
 		$this->expectExceptionMessage('DateTimeInterface expected');
@@ -171,7 +171,7 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testContainsInvalidItemType(Foo $foo)
+	public function testContainsInvalidItemType(Foo $foo): void
 	{
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
 		$this->expectExceptionMessage('DateTimeInterface expected');
@@ -184,7 +184,7 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
-	public function testRemoveInvalidItemType(Foo $foo)
+	public function testRemoveInvalidItemType(Foo $foo): void
 	{
 		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
 		$this->expectExceptionMessage('DateTimeInterface expected');

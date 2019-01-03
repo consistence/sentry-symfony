@@ -22,9 +22,9 @@ use Nette\Loaders\RobotLoader;
 class SentryDataGenerator extends \Consistence\ObjectPrototype
 {
 
-	const SUFFIX = 'Generated';
+	private const SUFFIX = 'Generated';
 
-	const GENERATED_FILENAME_NS_PART = 'Consistence_Sentry_SymfonyBundle_Type_';
+	private const GENERATED_FILENAME_NS_PART = 'Consistence_Sentry_SymfonyBundle_Type_';
 
 	/** @var string */
 	private $sourceDirectory;
@@ -38,7 +38,7 @@ class SentryDataGenerator extends \Consistence\ObjectPrototype
 		$this->targetDirectory = __DIR__ . '/data-generated';
 	}
 
-	public function generate(string $entity)
+	public function generate(string $entity): void
 	{
 		$filePath = $this->targetDirectory . '/' . static::GENERATED_FILENAME_NS_PART . $entity . '.php';
 		if (!file_exists($filePath)) {
@@ -90,7 +90,7 @@ class SentryDataGenerator extends \Consistence\ObjectPrototype
 		);
 	}
 
-	private function modifyGeneratedFile(string $entity, string $file)
+	private function modifyGeneratedFile(string $entity, string $file): void
 	{
 		$classContent = file_get_contents($file);
 		$classContent = str_replace('class ' . $entity, 'class ' . $entity . self::SUFFIX, $classContent);

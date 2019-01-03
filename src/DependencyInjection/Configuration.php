@@ -14,10 +14,10 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 class Configuration implements \Symfony\Component\Config\Definition\ConfigurationInterface
 {
 
-	const DEFAULT_GENERATED_FILES_DIR_NAME = 'sentry';
+	public const DEFAULT_GENERATED_FILES_DIR_NAME = 'sentry';
 
-	const PARAMETER_GENERATED_FILES_DIR = 'generated_files_dir';
-	const PARAMETER_METHOD_ANNOTATIONS_MAP = 'method_annotations_map';
+	public const PARAMETER_GENERATED_FILES_DIR = 'generated_files_dir';
+	public const PARAMETER_METHOD_ANNOTATIONS_MAP = 'method_annotations_map';
 
 	/** @var string */
 	private $rootNode;

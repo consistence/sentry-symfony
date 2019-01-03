@@ -9,7 +9,7 @@ use ReflectionProperty;
 class VarAnnotationProviderIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
-	public function testGetVarAnnotationValue()
+	public function testGetVarAnnotationValue(): void
 	{
 		$varAnnotationProvider = new VarAnnotationProvider();
 
@@ -23,7 +23,7 @@ class VarAnnotationProviderIntegrationTest extends \PHPUnit\Framework\TestCase
 		$this->assertEmpty($annotation->getFields());
 	}
 
-	public function testVarAnnotationDoesNotExist()
+	public function testVarAnnotationDoesNotExist(): void
 	{
 		try {
 			$varAnnotationProvider = new VarAnnotationProvider();
