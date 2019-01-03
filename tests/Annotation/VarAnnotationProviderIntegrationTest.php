@@ -30,14 +30,14 @@ class VarAnnotationProviderIntegrationTest extends \PHPUnit\Framework\TestCase
 
 			$varAnnotationProvider->getPropertyAnnotation(new ReflectionProperty(
 				Foo::class,
-				'withFields'
+				'withoutVar'
 			), 'var');
 
 			$this->fail();
 
 		} catch (\Consistence\Annotation\AnnotationNotFoundException $e) {
 			$this->assertSame(Foo::class, $e->getProperty()->getDeclaringClass()->getName());
-			$this->assertSame('withFields', $e->getProperty()->getName());
+			$this->assertSame('withoutVar', $e->getProperty()->getName());
 			$this->assertSame('var', $e->getAnnotationName());
 		}
 	}

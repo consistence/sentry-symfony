@@ -17,13 +17,18 @@ class Foo extends \Consistence\ObjectPrototype
 
 	/**
 	 * @Sentry\Get(name="fooName", visibility="private")
+	 * @var string
 	 */
 	private $withFields;
 
 	/**
 	 * @Sentry\Get
 	 * @Sentry\Get(name="fooName")
+	 * @var string
 	 */
 	private $multiple;
+
+	/** @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingPropertyTypeHint */
+	private $withoutVar;
 
 }
