@@ -28,7 +28,7 @@ class Foo extends \Consistence\ObjectPrototype
 	 */
 	private $multiple;
 
-	/** @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingPropertyTypeHint */
+	/** @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint */
 	private $withoutVar;
 
 }
