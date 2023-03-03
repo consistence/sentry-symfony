@@ -10,16 +10,16 @@
 		}
 	],
 	"require": {
-		"php": "~7.2",
-		"consistence/consistence": "~2.0",
+		"php": "^7.2",
+		"consistence/consistence": "^2.0",
 		"consistence/class-finder-implementation": "1.0",
 		"consistence/sentry": "~0.15",
-		"doctrine/annotations": "~1.2",
-		"symfony/config": "~3.0",
-		"symfony/console": "~3.0",
-		"symfony/dependency-injection": "~3.0",
-		"symfony/http-kernel": "~3.0",
-		"symfony/yaml": "~3.0"
+		"doctrine/annotations": "^1.2",
+		"symfony/config": "^3.0",
+		"symfony/console": "^3.0",
+		"symfony/dependency-injection": "^3.0",
+		"symfony/http-kernel": "^3.0",
+		"symfony/yaml": "^3.0"
 	},
 	"require-dev": {
 		"consistence/coding-standard": "3.10.1",
