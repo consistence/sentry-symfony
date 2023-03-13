@@ -53,10 +53,16 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testSetNullToNotNullable(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('DateTimeImmutable expected');
+		$invalidValue = null;
 
-		$foo->setCreatedDate(null);
+		try {
+			$foo->setCreatedDate($invalidValue);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame('null', $e->getValueType());
+			Assert::assertSame(DateTimeImmutable::class, $e->getExpectedTypes());
+		}
 	}
 
 	/**
@@ -66,10 +72,16 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testSetScalarType(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('DateTimeImmutable expected');
+		$invalidValue = 1;
 
-		$foo->setCreatedDate(1);
+		try {
+			$foo->setCreatedDate($invalidValue);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame('int', $e->getValueType());
+			Assert::assertSame(DateTimeImmutable::class, $e->getExpectedTypes());
+		}
 	}
 
 	/**
@@ -79,10 +91,16 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testSetInvalidType(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('DateTimeImmutable expected');
+		$invalidValue = new DateTime();
 
-		$foo->setCreatedDate(new DateTime());
+		try {
+			$foo->setCreatedDate($invalidValue);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame(DateTime::class, $e->getValueType());
+			Assert::assertSame(DateTimeImmutable::class, $e->getExpectedTypes());
+		}
 	}
 
 	/**
@@ -92,10 +110,16 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testNullableSetScalarType(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('DateTimeImmutable|null expected');
+		$invalidValue = 1;
 
-		$foo->setPublishDate(1);
+		try {
+			$foo->setPublishDate($invalidValue);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame('int', $e->getValueType());
+			Assert::assertSame(sprintf('%s|null', DateTimeImmutable::class), $e->getExpectedTypes());
+		}
 	}
 
 	/**
@@ -105,10 +129,16 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testNullableSetInvalidType(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('DateTimeImmutable|null expected');
+		$invalidValue = new DateTime();
 
-		$foo->setPublishDate(new DateTime());
+		try {
+			$foo->setPublishDate($invalidValue);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame(DateTime::class, $e->getValueType());
+			Assert::assertSame(sprintf('%s|null', DateTimeImmutable::class), $e->getExpectedTypes());
+		}
 	}
 
 	/**

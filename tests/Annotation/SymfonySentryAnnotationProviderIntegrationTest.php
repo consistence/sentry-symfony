@@ -49,9 +49,13 @@ class SymfonySentryAnnotationProviderIntegrationTest extends \PHPUnit\Framework\
 		$annotationProvider = $this->createAnnotationProvider();
 		$property = new ReflectionProperty(Foo::class, 'noParams');
 
-		$this->expectException(\Consistence\Annotation\AnnotationNotFoundException::class);
-
-		$annotationProvider->getPropertyAnnotation($property, 'foo');
+		try {
+			$annotationProvider->getPropertyAnnotation($property, 'foo');
+			Assert::fail('Exception expected');
+		} catch (\Consistence\Annotation\AnnotationNotFoundException $e) {
+			Assert::assertSame($property, $e->getProperty());
+			Assert::assertSame('foo', $e->getAnnotationName());
+		}
 	}
 
 	public function testGetAnnotations(): void
