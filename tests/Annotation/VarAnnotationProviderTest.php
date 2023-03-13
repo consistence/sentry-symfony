@@ -14,7 +14,7 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function varAnnotationProvider(): array
+	public function varAnnotationDataProvider(): array
 	{
 		return [
 			['string'],
@@ -35,7 +35,7 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider varAnnotationProvider
+	 * @dataProvider varAnnotationDataProvider
 	 *
 	 * @param string $value
 	 */
@@ -65,7 +65,7 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider varAnnotationProvider
+	 * @dataProvider varAnnotationDataProvider
 	 *
 	 * @param string $value
 	 */
