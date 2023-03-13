@@ -26,7 +26,6 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 			['\Foo'],
 			['\Foo\Bar'],
 			['Foo'],
-			['Foo'],
 			['\Foo|integer'],
 			['string[]'],
 			['\Foo[]'],
