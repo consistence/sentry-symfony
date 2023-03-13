@@ -20,7 +20,7 @@ class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 			$generator->generate('Foo');
 
 			return [
-				new FooGenerated(),
+				'foo' => new FooGenerated(),
 			];
 		})();
 	}
