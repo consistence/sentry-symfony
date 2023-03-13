@@ -15,12 +15,14 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function fooDataProvider(): Generator
 	{
-		$generator = new SentryDataGenerator();
-		$generator->generate('Foo');
+		yield (function (): array {
+			$generator = new SentryDataGenerator();
+			$generator->generate('Foo');
 
-		yield [
-			new FooGenerated(),
-		];
+			return [
+				new FooGenerated(),
+			];
+		})();
 	}
 
 	/**
