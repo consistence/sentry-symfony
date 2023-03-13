@@ -20,7 +20,9 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 		$generator = new SentryDataGenerator();
 		$generator->generate('Foo');
 
-		yield [new FooGenerated()];
+		yield [
+			new FooGenerated(),
+		];
 	}
 
 	/**

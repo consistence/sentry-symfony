@@ -17,20 +17,48 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function varAnnotationDataProvider(): Generator
 	{
-		yield ['string'];
-		yield ['integer'];
-		yield ['null'];
-		yield ['string|null'];
-		yield ['int'];
-		yield ['string|integer'];
-		yield ['\Foo'];
-		yield ['\Foo\Bar'];
-		yield ['Foo'];
-		yield ['\Foo|integer'];
-		yield ['string[]'];
-		yield ['\Foo[]'];
-		yield ['Template<Foo>'];
-		yield ['integer:string'];
+		yield [
+			'string',
+		];
+		yield [
+			'integer',
+		];
+		yield [
+			'null',
+		];
+		yield [
+			'string|null',
+		];
+		yield [
+			'int',
+		];
+		yield [
+			'string|integer',
+		];
+		yield [
+			'\Foo',
+		];
+		yield [
+			'\Foo\Bar',
+		];
+		yield [
+			'Foo',
+		];
+		yield [
+			'\Foo|integer',
+		];
+		yield [
+			'string[]',
+		];
+		yield [
+			'\Foo[]',
+		];
+		yield [
+			'Template<Foo>',
+		];
+		yield [
+			'integer:string',
+		];
 	}
 
 	/**
