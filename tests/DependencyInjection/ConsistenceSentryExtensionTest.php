@@ -9,6 +9,7 @@ use Consistence\Sentry\SymfonyBundle\Annotation\Contains;
 use Consistence\Sentry\SymfonyBundle\Annotation\Get;
 use Consistence\Sentry\SymfonyBundle\Annotation\Remove;
 use Consistence\Sentry\SymfonyBundle\Annotation\Set;
+use PHPUnit\Framework\Assert;
 
 class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase
 {
@@ -110,7 +111,7 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 	{
 		$dir = $this->getTempDir() . '/testConfigureGeneratedFilesDirNonExistingDirectoryCreatesDir';
 		@rmdir($dir);
-		$this->assertFileNotExists($dir);
+		Assert::assertFileNotExists($dir);
 
 		$this->load([
 			'generated_files_dir' => $dir,
@@ -124,7 +125,7 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 			ConsistenceSentryExtension::CONTAINER_PARAMETER_GENERATED_CLASS_MAP_TARGET_FILE,
 			realpath($dir) . '/_classMap.php'
 		);
-		$this->assertFileExists($dir);
+		Assert::assertFileExists($dir);
 
 		$this->compile();
 	}

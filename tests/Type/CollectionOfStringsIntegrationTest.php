@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Consistence\Sentry\SymfonyBundle\Type;
 
+use PHPUnit\Framework\Assert;
+
 class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
@@ -27,7 +29,7 @@ class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testGetEmpty(Foo $foo): void
 	{
-		$this->assertEmpty($foo->getAuthors());
+		Assert::assertEmpty($foo->getAuthors());
 	}
 
 	/**
@@ -42,7 +44,7 @@ class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 			'Myself',
 		];
 		$foo->setAuthors($authors);
-		$this->assertEquals($authors, $foo->getAuthors());
+		Assert::assertEquals($authors, $foo->getAuthors());
 	}
 
 	/**
@@ -53,7 +55,7 @@ class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 	public function testAdd(Foo $foo): void
 	{
 		$foo->addAuthor('Irene');
-		$this->assertContains('Irene', $foo->getAuthors());
+		Assert::assertContains('Irene', $foo->getAuthors());
 	}
 
 	/**
@@ -69,9 +71,9 @@ class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 		];
 		$foo->setAuthors($authors);
 
-		$this->assertTrue($foo->containsAuthor('Me'));
-		$this->assertTrue($foo->containsAuthor('Myself'));
-		$this->assertFalse($foo->containsAuthor('Irene'));
+		Assert::assertTrue($foo->containsAuthor('Me'));
+		Assert::assertTrue($foo->containsAuthor('Myself'));
+		Assert::assertFalse($foo->containsAuthor('Irene'));
 	}
 
 	/**
@@ -89,8 +91,8 @@ class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 
 		$foo->removeAuthor('Me');
 
-		$this->assertFalse($foo->containsAuthor('Me'));
-		$this->assertTrue($foo->containsAuthor('Myself'));
+		Assert::assertFalse($foo->containsAuthor('Me'));
+		Assert::assertTrue($foo->containsAuthor('Myself'));
 	}
 
 	/**
