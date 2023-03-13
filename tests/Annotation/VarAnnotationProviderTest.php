@@ -62,16 +62,36 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider varAnnotationDataProvider
+	 * @return mixed[][]|\Generator
+	 */
+	public function getVarAnnotationValueDataProvider(): Generator
+	{
+		foreach ($this->varAnnotationDataProvider() as $caseName => $caseData) {
+			yield $caseName . ' - inline annotation' => [
+				'value' => $caseData['value'],
+				'docComment' => sprintf('/** @var %s */', $caseData['value']),
+			];
+
+			yield $caseName . ' - multiline annotation' => [
+				'value' => $caseData['value'],
+				'docComment' => sprintf('/**
+					 * @var %s
+					 */', $caseData['value']),
+			];
+		}
+	}
+
+	/**
+	 * @dataProvider getVarAnnotationValueDataProvider
 	 *
 	 * @param string $value
+	 * @param string $docComment
 	 */
-	public function testGetVarAnnotationValue(string $value): void
+	public function testGetVarAnnotationValue(
+		string $value,
+		string $docComment
+	): void
 	{
-		$docComment = sprintf('/**
-			 * @var %s
-			 */', $value);
-
 		$property = $this
 			->getMockBuilder(ReflectionProperty::class)
 			->disableOriginalConstructor()
@@ -92,86 +112,51 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider varAnnotationDataProvider
-	 *
-	 * @param string $value
+	 * @return mixed[][]|\Generator
 	 */
-	public function testGetVarAnnotationValueInline(string $value): void
+	public function annotationNotFoundDataProvider(): Generator
 	{
-		$docComment = sprintf('/** @var %s */', $value);
-
-		$property = $this
-			->getMockBuilder(ReflectionProperty::class)
-			->disableOriginalConstructor()
-			->getMock();
-
-		$property
-			->expects(self::once())
-			->method('getDocComment')
-			->willReturn($docComment);
-
-		$varAnnotationProvider = new VarAnnotationProvider();
-
-		$annotation = $varAnnotationProvider->getPropertyAnnotation($property, 'var');
-
-		Assert::assertSame('var', $annotation->getName());
-		Assert::assertSame($value, $annotation->getValue());
-		Assert::assertCount(0, $annotation->getFields());
-	}
-
-	public function testVarAnnotationDoesNotExist(): void
-	{
-		try {
-			$docComment = '/**
+		yield '@var annotation does not exist' => [
+			'docComment' => '/**
 				 * @author
-				 */';
+				 */',
+			'annotationName' => 'var',
+		];
 
-			$property = $this
-				->getMockBuilder(ReflectionProperty::class)
-				->disableOriginalConstructor()
-				->getMock();
-
-			$property
-				->expects(self::once())
-				->method('getDocComment')
-				->willReturn($docComment);
-
-			$property
-				->expects(self::any())
-				->method('getDeclaringClass')
-				->willReturn(new ReflectionClass(Foo::class));
-
-			$property
-				->expects(self::any())
-				->method('getName')
-				->willReturn('test');
-
-			$varAnnotationProvider = new VarAnnotationProvider();
-
-			$varAnnotationProvider->getPropertyAnnotation($property, 'var');
-
-			Assert::fail('Exception expected');
-
-		} catch (\Consistence\Annotation\AnnotationNotFoundException $e) {
-			Assert::assertSame($property, $e->getProperty());
-			Assert::assertSame('var', $e->getAnnotationName());
-		}
-	}
-
-	public function testMalformedVarAnnotation(): void
-	{
-		try {
-			$docComment = '/**
+		yield 'malformed @var annotation' => [
+			'docComment' => '/**
 				 * @var
-				 */';
+				 */',
+			'annotationName' => 'var',
+		];
 
+		yield 'supports only @var annotation' => [
+			'docComment' => '/**
+				 * @author
+				 */',
+			'annotationName' => 'author',
+		];
+	}
+
+	/**
+	 * @dataProvider annotationNotFoundDataProvider
+	 *
+	 * @param string|null $docComment
+	 * @param string $annotationName
+	 */
+	public function testAnnotationNotFound(
+		?string $docComment,
+		string $annotationName
+	): void
+	{
+		try {
 			$property = $this
 				->getMockBuilder(ReflectionProperty::class)
 				->disableOriginalConstructor()
 				->getMock();
 
 			$property
-				->expects(self::once())
+				->expects(self::atMost(1))
 				->method('getDocComment')
 				->willReturn($docComment);
 
@@ -187,43 +172,13 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 
 			$varAnnotationProvider = new VarAnnotationProvider();
 
-			$varAnnotationProvider->getPropertyAnnotation($property, 'var');
+			$varAnnotationProvider->getPropertyAnnotation($property, $annotationName);
 
 			Assert::fail('Exception expected');
 
 		} catch (\Consistence\Annotation\AnnotationNotFoundException $e) {
 			Assert::assertSame($property, $e->getProperty());
-			Assert::assertSame('var', $e->getAnnotationName());
-		}
-	}
-
-	public function testSupportsOnlyVarAnnotation(): void
-	{
-		try {
-			$property = $this
-				->getMockBuilder(ReflectionProperty::class)
-				->disableOriginalConstructor()
-				->getMock();
-
-			$property
-				->expects(self::any())
-				->method('getDeclaringClass')
-				->willReturn(new ReflectionClass(Foo::class));
-
-			$property
-				->expects(self::any())
-				->method('getName')
-				->willReturn('test');
-
-			$varAnnotationProvider = new VarAnnotationProvider();
-
-			$varAnnotationProvider->getPropertyAnnotation($property, 'author');
-
-			Assert::fail('Exception expected');
-
-		} catch (\Consistence\Annotation\AnnotationNotFoundException $e) {
-			Assert::assertSame($property, $e->getProperty());
-			Assert::assertSame('author', $e->getAnnotationName());
+			Assert::assertSame($annotationName, $e->getAnnotationName());
 		}
 	}
 

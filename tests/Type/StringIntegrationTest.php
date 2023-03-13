@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence\Sentry\SymfonyBundle\Type;
 
+use Closure;
 use Generator;
 use PHPUnit\Framework\Assert;
 
@@ -46,126 +47,120 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider fooDataProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
+	 * @return mixed[][]|\Generator
 	 */
-	public function testSet(Foo $foo): void
+	public function setDataProvider(): Generator
 	{
-		$foo->setName('fooBar');
-		Assert::assertSame('fooBar', $foo->getName());
-	}
+		foreach ($this->fooDataProvider() as $caseName => $caseData) {
+			yield $caseName . ' - non-empty string' => [
+				'foo' => $caseData['foo'],
+				'value' => 'fooBar',
+			];
 
-	/**
-	 * @dataProvider fooDataProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
-	 */
-	public function testSetNullToNotNullable(Foo $foo): void
-	{
-		$invalidValue = null;
+			yield $caseName . ' - empty string' => [
+				'foo' => $caseData['foo'],
+				'value' => '',
+			];
 
-		try {
-			$foo->setName($invalidValue);
-			Assert::fail('Exception expected');
-		} catch (\Consistence\InvalidArgumentTypeException $e) {
-			Assert::assertSame($invalidValue, $e->getValue());
-			Assert::assertSame('null', $e->getValueType());
-			Assert::assertSame('string', $e->getExpectedTypes());
+			yield $caseName . ' - string zero' => [
+				'foo' => $caseData['foo'],
+				'value' => '0',
+			];
+
+			yield $caseName . ' - whitespace string' => [
+				'foo' => $caseData['foo'],
+				'value' => '    ',
+			];
 		}
 	}
 
 	/**
-	 * @dataProvider fooDataProvider
+	 * @dataProvider setDataProvider
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
+	 * @param string $value
 	 */
-	public function testSetEmptyString(Foo $foo): void
+	public function testSet(
+		Foo $foo,
+		string $value
+	): void
 	{
-		$foo->setName('');
-		Assert::assertSame('', $foo->getName());
+		$foo->setName($value);
+		Assert::assertSame($value, $foo->getName());
 	}
 
 	/**
-	 * @dataProvider fooDataProvider
+	 * @dataProvider setDataProvider
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
+	 * @param string $value
 	 */
-	public function testSetStringZero(Foo $foo): void
+	public function testSetNullable(
+		Foo $foo,
+		string $value
+	): void
 	{
-		$foo->setName('0');
-		Assert::assertSame('0', $foo->getName());
+		$foo->setDescription($value);
+		Assert::assertSame($value, $foo->getDescription());
 	}
 
 	/**
-	 * @dataProvider fooDataProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
+	 * @return mixed[][]|\Generator
 	 */
-	public function testSetWhitespaceString(Foo $foo): void
+	public function invalidArgumentTypeDataProvider(): Generator
 	{
-		$foo->setName('    ');
-		Assert::assertSame('    ', $foo->getName());
-	}
+		foreach ($this->fooDataProvider() as $caseName => $caseData) {
+			yield $caseName . ' - set not nullable with null value' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->setName(null);
+				},
+				'expectedInvalidValue' => null,
+				'expectedInvalidValueType' => 'null',
+				'expectedExpectedTypes' => 'string',
+			];
 
-	/**
-	 * @dataProvider fooDataProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
-	 */
-	public function testSetInvalidType(Foo $foo): void
-	{
-		$invalidValue = 1;
+			yield $caseName . ' - set not nullable with invalid type' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->setName(1);
+				},
+				'expectedInvalidValue' => 1,
+				'expectedInvalidValueType' => 'int',
+				'expectedExpectedTypes' => 'string',
+			];
 
-		try {
-			$foo->setName($invalidValue);
-			Assert::fail('Exception expected');
-		} catch (\Consistence\InvalidArgumentTypeException $e) {
-			Assert::assertSame($invalidValue, $e->getValue());
-			Assert::assertSame('int', $e->getValueType());
-			Assert::assertSame('string', $e->getExpectedTypes());
+			yield $caseName . ' - set nullable with invalid type' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->setDescription(1);
+				},
+				'expectedInvalidValue' => 1,
+				'expectedInvalidValueType' => 'int',
+				'expectedExpectedTypes' => 'string|null',
+			];
 		}
 	}
 
 	/**
-	 * @dataProvider fooDataProvider
+	 * @dataProvider invalidArgumentTypeDataProvider
 	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
+	 * @param \Closure $callMethodCallback
+	 * @param mixed $expectedInvalidValue
+	 * @param string $expectedInvalidValueType
+	 * @param string $expectedExpectedTypes
 	 */
-	public function testNullableSetEmptyString(Foo $foo): void
+	public function testCallMethodWithInvalidArgumentType(
+		Closure $callMethodCallback,
+		$expectedInvalidValue,
+		string $expectedInvalidValueType,
+		string $expectedExpectedTypes
+	): void
 	{
-		$foo->setDescription('');
-		Assert::assertSame('', $foo->getDescription());
-	}
-
-	/**
-	 * @dataProvider fooDataProvider
-	 * @depends testGet
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
-	 */
-	public function testNullableSetWhitespaceString(Foo $foo): void
-	{
-		$foo->setDescription('    ');
-		Assert::assertSame('    ', $foo->getDescription());
-	}
-
-	/**
-	 * @dataProvider fooDataProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
-	 */
-	public function testNullableSetInvalidType(Foo $foo): void
-	{
-		$invalidValue = 1;
-
 		try {
-			$foo->setDescription($invalidValue);
+			$callMethodCallback();
 			Assert::fail('Exception expected');
 		} catch (\Consistence\InvalidArgumentTypeException $e) {
-			Assert::assertSame($invalidValue, $e->getValue());
-			Assert::assertSame('int', $e->getValueType());
-			Assert::assertSame('string|null', $e->getExpectedTypes());
+			Assert::assertSame($expectedInvalidValue, $e->getValue());
+			Assert::assertSame($expectedInvalidValueType, $e->getValueType());
+			Assert::assertSame($expectedExpectedTypes, $e->getExpectedTypes());
 		}
 	}
 

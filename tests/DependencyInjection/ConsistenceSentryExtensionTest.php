@@ -55,19 +55,24 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 	/**
 	 * @return mixed[][]|\Generator
 	 */
-	public function defaultConfigurationValuesDataProvider(): Generator
+	public function configureContainerParameterDataProvider(): Generator
 	{
-		yield 'generated.target_dir' => [
+		yield 'default generated.target_dir' => [
+			'configuration' => [],
 			'parameterName' => ConsistenceSentryExtension::CONTAINER_PARAMETER_GENERATED_TARGET_DIR,
-			'parameterValue' => $this->getCacheDir() . '/sentry',
+			'expectedParameterValue' => $this->getCacheDir() . '/sentry',
 		];
-		yield 'generated.class_map_target_file' => [
+
+		yield 'default generated.class_map_target_file' => [
+			'configuration' => [],
 			'parameterName' => ConsistenceSentryExtension::CONTAINER_PARAMETER_GENERATED_CLASS_MAP_TARGET_FILE,
-			'parameterValue' => $this->getCacheDir() . '/sentry/_classMap.php',
+			'expectedParameterValue' => $this->getCacheDir() . '/sentry/_classMap.php',
 		];
-		yield 'annotation.method_annotations_map' => [
+
+		yield 'default annotation.method_annotations_map' => [
+			'configuration' => [],
 			'parameterName' => ConsistenceSentryExtension::CONTAINER_PARAMETER_ANNOTATION_METHOD_ANNOTATIONS_MAP,
-			'parameterValue' => [
+			'expectedParameterValue' => [
 				Add::class => 'add',
 				Contains::class => 'contains',
 				Get::class => 'get',
@@ -75,32 +80,49 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 				Set::class => 'set',
 			],
 		];
+
+		yield 'configure generated.target_dir' => [
+			'configuration' => [
+				'generated_files_dir' => __DIR__,
+			],
+			'parameterName' => ConsistenceSentryExtension::CONTAINER_PARAMETER_GENERATED_TARGET_DIR,
+			'expectedParameterValue' => realpath(__DIR__),
+		];
+
+		yield 'configure annotation.method_annotations_map' => (static function (): array {
+			$methodAnnotationsMap = [
+				Get::class => 'get',
+				Set::class => 'set',
+			];
+
+			return [
+				'configuration' => [
+					'method_annotations_map' => $methodAnnotationsMap,
+				],
+				'parameterName' => ConsistenceSentryExtension::CONTAINER_PARAMETER_ANNOTATION_METHOD_ANNOTATIONS_MAP,
+				'expectedParameterValue' => $methodAnnotationsMap,
+			];
+		})();
 	}
 
 	/**
-	 * @dataProvider defaultConfigurationValuesDataProvider
+	 * @dataProvider configureContainerParameterDataProvider
 	 *
+	 * @param mixed[][] $configuration
 	 * @param string $parameterName
-	 * @param mixed $parameterValue
+	 * @param mixed $expectedParameterValue
 	 */
-	public function testDefaultConfigurationValues(string $parameterName, $parameterValue): void
+	public function testConfigureContainerParameter(
+		array $configuration,
+		string $parameterName,
+		$expectedParameterValue
+	): void
 	{
-		$this->load();
-
-		$this->assertContainerBuilderHasParameter($parameterName, $parameterValue);
-
-		$this->compile();
-	}
-
-	public function testConfigureGeneratedFilesDir(): void
-	{
-		$this->load([
-			'generated_files_dir' => __DIR__,
-		]);
+		$this->load($configuration);
 
 		$this->assertContainerBuilderHasParameter(
-			ConsistenceSentryExtension::CONTAINER_PARAMETER_GENERATED_TARGET_DIR,
-			realpath(__DIR__)
+			$parameterName,
+			$expectedParameterValue
 		);
 
 		$this->compile();
@@ -125,24 +147,6 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 			realpath($dir) . '/_classMap.php'
 		);
 		Assert::assertFileExists($dir);
-
-		$this->compile();
-	}
-
-	public function testConfigureMethodAnnotationMap(): void
-	{
-		$methodAnnotationsMap = [
-			Get::class => 'get',
-			Set::class => 'set',
-		];
-		$this->load([
-			'method_annotations_map' => $methodAnnotationsMap,
-		]);
-
-		$this->assertContainerBuilderHasParameter(
-			ConsistenceSentryExtension::CONTAINER_PARAMETER_ANNOTATION_METHOD_ANNOTATIONS_MAP,
-			$methodAnnotationsMap
-		);
 
 		$this->compile();
 	}

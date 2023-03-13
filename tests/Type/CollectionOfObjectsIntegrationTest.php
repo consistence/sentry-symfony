@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence\Sentry\SymfonyBundle\Type;
 
+use Closure;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Generator;
@@ -107,138 +108,136 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider fooDataProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
+	 * @return mixed[][]|\Generator
 	 */
-	public function testSetInvalidCollectionType(Foo $foo): void
+	public function invalidArgumentTypeDataProvider(): Generator
 	{
-		$invalidValue = new DateTimeImmutable();
-		$eventDates = $invalidValue;
+		foreach ($this->fooDataProvider() as $caseName => $caseData) {
+			yield $caseName . ' - setEventDates() with invalid collection type' => (function () use ($caseData): array {
+				$invalidValue = new DateTimeImmutable();
 
-		try {
-			$foo->setEventDates($eventDates);
-			Assert::fail('Exception expected');
-		} catch (\Consistence\InvalidArgumentTypeException $e) {
-			Assert::assertSame($invalidValue, $e->getValue());
-			Assert::assertSame(DateTimeImmutable::class, $e->getValueType());
-			Assert::assertSame('array', $e->getExpectedTypes());
+				return [
+					'callMethodCallback' => function () use ($caseData, $invalidValue): void {
+						$caseData['foo']->setEventDates($invalidValue);
+					},
+					'expectedInvalidValue' => $invalidValue,
+					'expectedInvalidValueType' => DateTimeImmutable::class,
+					'expectedExpectedTypes' => 'array',
+				];
+			})();
+
+			yield $caseName . ' - setEventDates() with invalid item type' => (function () use ($caseData): array {
+				$invalidValue = new stdClass();
+
+				return [
+					'callMethodCallback' => function () use ($caseData, $invalidValue): void {
+						$caseData['foo']->setEventDates([new DateTimeImmutable(), $invalidValue]);
+					},
+					'expectedInvalidValue' => $invalidValue,
+					'expectedInvalidValueType' => stdClass::class,
+					'expectedExpectedTypes' => DateTimeInterface::class,
+				];
+			})();
+
+			yield $caseName . ' - setEventDates() with null value' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->setEventDates([new DateTimeImmutable(), null]);
+				},
+				'expectedInvalidValue' => null,
+				'expectedInvalidValueType' => 'null',
+				'expectedExpectedTypes' => DateTimeInterface::class,
+			];
+
+			yield $caseName . ' - addEventDate() with invalid item type' => (function () use ($caseData): array {
+				$invalidValue = new stdClass();
+
+				return [
+					'callMethodCallback' => function () use ($caseData, $invalidValue): void {
+						$caseData['foo']->addEventDate($invalidValue);
+					},
+					'expectedInvalidValue' => $invalidValue,
+					'expectedInvalidValueType' => stdClass::class,
+					'expectedExpectedTypes' => DateTimeInterface::class,
+				];
+			})();
+
+			yield $caseName . ' - addEventDate() with null value' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->addEventDate(null);
+				},
+				'expectedInvalidValue' => null,
+				'expectedInvalidValueType' => 'null',
+				'expectedExpectedTypes' => DateTimeInterface::class,
+			];
+
+			yield $caseName . ' - containsEventDate() with invalid item type' => (function () use ($caseData): array {
+				$invalidValue = new stdClass();
+
+				return [
+					'callMethodCallback' => function () use ($caseData, $invalidValue): void {
+						$caseData['foo']->containsEventDate($invalidValue);
+					},
+					'expectedInvalidValue' => $invalidValue,
+					'expectedInvalidValueType' => stdClass::class,
+					'expectedExpectedTypes' => DateTimeInterface::class,
+				];
+			})();
+
+			yield $caseName . ' - containsEventDate() with null value' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->containsEventDate(null);
+				},
+				'expectedInvalidValue' => null,
+				'expectedInvalidValueType' => 'null',
+				'expectedExpectedTypes' => DateTimeInterface::class,
+			];
+
+			yield $caseName . ' - removeEventDate() with invalid item type' => (function () use ($caseData): array {
+				$invalidValue = new stdClass();
+
+				return [
+					'callMethodCallback' => function () use ($caseData, $invalidValue): void {
+						$caseData['foo']->removeEventDate($invalidValue);
+					},
+					'expectedInvalidValue' => $invalidValue,
+					'expectedInvalidValueType' => stdClass::class,
+					'expectedExpectedTypes' => DateTimeInterface::class,
+				];
+			})();
+
+			yield $caseName . ' - removeEventDate() with null value' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->removeEventDate(null);
+				},
+				'expectedInvalidValue' => null,
+				'expectedInvalidValueType' => 'null',
+				'expectedExpectedTypes' => DateTimeInterface::class,
+			];
 		}
 	}
 
 	/**
-	 * @dataProvider fooDataProvider
+	 * @dataProvider invalidArgumentTypeDataProvider
 	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
+	 * @param \Closure $callMethodCallback
+	 * @param mixed $expectedInvalidValue
+	 * @param string $expectedInvalidValueType
+	 * @param string $expectedExpectedTypes
 	 */
-	public function testSetInvalidItemType(Foo $foo): void
+	public function testCallMethodWithInvalidArgumentType(
+		Closure $callMethodCallback,
+		$expectedInvalidValue,
+		string $expectedInvalidValueType,
+		string $expectedExpectedTypes
+	): void
 	{
-		$invalidValue = new stdClass();
-		$eventDates = [new DateTimeImmutable(), $invalidValue];
-
 		try {
-			$foo->setEventDates($eventDates);
+			$callMethodCallback();
 			Assert::fail('Exception expected');
 		} catch (\Consistence\InvalidArgumentTypeException $e) {
-			Assert::assertSame($invalidValue, $e->getValue());
-			Assert::assertSame(stdClass::class, $e->getValueType());
-			Assert::assertSame(DateTimeInterface::class, $e->getExpectedTypes());
-		}
-	}
-
-	/**
-	 * @dataProvider fooDataProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
-	 */
-	public function testSetNullValue(Foo $foo): void
-	{
-		$invalidValue = null;
-		$eventDates = [new DateTimeImmutable(), $invalidValue];
-
-		try {
-			$foo->setEventDates($eventDates);
-			Assert::fail('Exception expected');
-		} catch (\Consistence\InvalidArgumentTypeException $e) {
-			Assert::assertSame($invalidValue, $e->getValue());
-			Assert::assertSame('null', $e->getValueType());
-			Assert::assertSame(DateTimeInterface::class, $e->getExpectedTypes());
-		}
-	}
-
-	/**
-	 * @dataProvider fooDataProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
-	 */
-	public function testAddInvalidItemType(Foo $foo): void
-	{
-		$invalidValue = new stdClass();
-
-		try {
-			$foo->addEventDate($invalidValue);
-			Assert::fail('Exception expected');
-		} catch (\Consistence\InvalidArgumentTypeException $e) {
-			Assert::assertSame($invalidValue, $e->getValue());
-			Assert::assertSame(stdClass::class, $e->getValueType());
-			Assert::assertSame(DateTimeInterface::class, $e->getExpectedTypes());
-		}
-	}
-
-	/**
-	 * @dataProvider fooDataProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
-	 */
-	public function testAddNull(Foo $foo): void
-	{
-		$invalidValue = null;
-
-		try {
-			$foo->addEventDate($invalidValue);
-			Assert::fail('Exception expected');
-		} catch (\Consistence\InvalidArgumentTypeException $e) {
-			Assert::assertSame($invalidValue, $e->getValue());
-			Assert::assertSame('null', $e->getValueType());
-			Assert::assertSame(DateTimeInterface::class, $e->getExpectedTypes());
-		}
-	}
-
-	/**
-	 * @dataProvider fooDataProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
-	 */
-	public function testContainsInvalidItemType(Foo $foo): void
-	{
-		$invalidValue = new stdClass();
-
-		try {
-			$foo->containsEventDate($invalidValue);
-			Assert::fail('Exception expected');
-		} catch (\Consistence\InvalidArgumentTypeException $e) {
-			Assert::assertSame($invalidValue, $e->getValue());
-			Assert::assertSame(stdClass::class, $e->getValueType());
-			Assert::assertSame(DateTimeInterface::class, $e->getExpectedTypes());
-		}
-	}
-
-	/**
-	 * @dataProvider fooDataProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
-	 */
-	public function testRemoveInvalidItemType(Foo $foo): void
-	{
-		$invalidValue = new stdClass();
-
-		try {
-			$foo->removeEventDate($invalidValue);
-			Assert::fail('Exception expected');
-		} catch (\Consistence\InvalidArgumentTypeException $e) {
-			Assert::assertSame($invalidValue, $e->getValue());
-			Assert::assertSame(stdClass::class, $e->getValueType());
-			Assert::assertSame(DateTimeInterface::class, $e->getExpectedTypes());
+			Assert::assertSame($expectedInvalidValue, $e->getValue());
+			Assert::assertSame($expectedInvalidValueType, $e->getValueType());
+			Assert::assertSame($expectedExpectedTypes, $e->getExpectedTypes());
 		}
 	}
 
