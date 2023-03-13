@@ -57,15 +57,15 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 	 */
 	public function defaultConfigurationValuesDataProvider(): Generator
 	{
-		yield [
+		yield 'generated.target_dir' => [
 			'parameterName' => ConsistenceSentryExtension::CONTAINER_PARAMETER_GENERATED_TARGET_DIR,
 			'parameterValue' => $this->getCacheDir() . '/sentry',
 		];
-		yield [
+		yield 'generated.class_map_target_file' => [
 			'parameterName' => ConsistenceSentryExtension::CONTAINER_PARAMETER_GENERATED_CLASS_MAP_TARGET_FILE,
 			'parameterValue' => $this->getCacheDir() . '/sentry/_classMap.php',
 		];
-		yield [
+		yield 'annotation.method_annotations_map' => [
 			'parameterName' => ConsistenceSentryExtension::CONTAINER_PARAMETER_ANNOTATION_METHOD_ANNOTATIONS_MAP,
 			'parameterValue' => [
 				Add::class => 'add',

@@ -18,7 +18,7 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function fooDataProvider(): Generator
 	{
-		yield (function (): array {
+		yield 'instance of generated class' => (function (): array {
 			$generator = new SentryDataGenerator();
 			$generator->generate('Foo');
 
