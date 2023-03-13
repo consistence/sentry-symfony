@@ -123,7 +123,7 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 
 			$varAnnotationProvider->getPropertyAnnotation($property, 'var');
 
-			Assert::fail();
+			Assert::fail('Exception expected');
 
 		} catch (\Consistence\Annotation\AnnotationNotFoundException $e) {
 			Assert::assertSame($property, $e->getProperty());
@@ -162,7 +162,7 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 
 			$varAnnotationProvider->getPropertyAnnotation($property, 'var');
 
-			Assert::fail();
+			Assert::fail('Exception expected');
 
 		} catch (\Consistence\Annotation\AnnotationNotFoundException $e) {
 			Assert::assertSame($property, $e->getProperty());
@@ -192,7 +192,7 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 
 			$varAnnotationProvider->getPropertyAnnotation($property, 'author');
 
-			Assert::fail();
+			Assert::fail('Exception expected');
 
 		} catch (\Consistence\Annotation\AnnotationNotFoundException $e) {
 			Assert::assertSame($property, $e->getProperty());

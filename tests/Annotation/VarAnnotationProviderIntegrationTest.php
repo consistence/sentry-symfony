@@ -34,7 +34,7 @@ class VarAnnotationProviderIntegrationTest extends \PHPUnit\Framework\TestCase
 				'withoutVar'
 			), 'var');
 
-			Assert::fail();
+			Assert::fail('Exception expected');
 
 		} catch (\Consistence\Annotation\AnnotationNotFoundException $e) {
 			Assert::assertSame(Foo::class, $e->getProperty()->getDeclaringClass()->getName());
