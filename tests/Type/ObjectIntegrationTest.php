@@ -14,7 +14,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @return \Consistence\Sentry\SymfonyBundle\Type\Foo[][]
 	 */
-	public function fooProvider(): array
+	public function fooDataProvider(): array
 	{
 		$generator = new SentryDataGenerator();
 		$generator->generate('Foo');
@@ -25,7 +25,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider fooProvider
+	 * @dataProvider fooDataProvider
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
@@ -35,7 +35,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider fooProvider
+	 * @dataProvider fooDataProvider
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
@@ -47,7 +47,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider fooProvider
+	 * @dataProvider fooDataProvider
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
@@ -66,7 +66,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider fooProvider
+	 * @dataProvider fooDataProvider
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
@@ -85,7 +85,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider fooProvider
+	 * @dataProvider fooDataProvider
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
@@ -104,7 +104,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider fooProvider
+	 * @dataProvider fooDataProvider
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
@@ -123,7 +123,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider fooProvider
+	 * @dataProvider fooDataProvider
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
@@ -142,7 +142,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @dataProvider fooProvider
+	 * @dataProvider fooDataProvider
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */

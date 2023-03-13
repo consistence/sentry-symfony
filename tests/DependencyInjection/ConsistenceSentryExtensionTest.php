@@ -54,7 +54,7 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 	/**
 	 * @return mixed[][]
 	 */
-	public function defaultConfigurationValuesProvider(): array
+	public function defaultConfigurationValuesDataProvider(): array
 	{
 		return [
 			[
@@ -79,7 +79,7 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 	}
 
 	/**
-	 * @dataProvider defaultConfigurationValuesProvider
+	 * @dataProvider defaultConfigurationValuesDataProvider
 	 *
 	 * @param string $parameterName
 	 * @param mixed $parameterValue
