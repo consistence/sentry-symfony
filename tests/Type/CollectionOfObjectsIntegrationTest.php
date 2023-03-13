@@ -6,6 +6,7 @@ namespace Consistence\Sentry\SymfonyBundle\Type;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use Generator;
 use PHPUnit\Framework\Assert;
 use stdClass;
 
@@ -13,16 +14,14 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
 	/**
-	 * @return \Consistence\Sentry\SymfonyBundle\Type\Foo[][]
+	 * @return \Consistence\Sentry\SymfonyBundle\Type\Foo[][]|\Generator
 	 */
-	public function fooDataProvider(): array
+	public function fooDataProvider(): Generator
 	{
 		$generator = new SentryDataGenerator();
 		$generator->generate('Foo');
 
-		return [
-			[new FooGenerated()],
-		];
+		yield [new FooGenerated()];
 	}
 
 	/**

@@ -9,6 +9,7 @@ use Consistence\Sentry\SymfonyBundle\Annotation\Contains;
 use Consistence\Sentry\SymfonyBundle\Annotation\Get;
 use Consistence\Sentry\SymfonyBundle\Annotation\Remove;
 use Consistence\Sentry\SymfonyBundle\Annotation\Set;
+use Generator;
 use PHPUnit\Framework\Assert;
 
 class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase
@@ -52,28 +53,26 @@ class ConsistenceSentryExtensionTest extends \Matthias\SymfonyDependencyInjectio
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return mixed[][]|\Generator
 	 */
-	public function defaultConfigurationValuesDataProvider(): array
+	public function defaultConfigurationValuesDataProvider(): Generator
 	{
-		return [
+		yield [
+			ConsistenceSentryExtension::CONTAINER_PARAMETER_GENERATED_TARGET_DIR,
+			$this->getCacheDir() . '/sentry',
+		];
+		yield [
+			ConsistenceSentryExtension::CONTAINER_PARAMETER_GENERATED_CLASS_MAP_TARGET_FILE,
+			$this->getCacheDir() . '/sentry/_classMap.php',
+		];
+		yield [
+			ConsistenceSentryExtension::CONTAINER_PARAMETER_ANNOTATION_METHOD_ANNOTATIONS_MAP,
 			[
-				ConsistenceSentryExtension::CONTAINER_PARAMETER_GENERATED_TARGET_DIR,
-				$this->getCacheDir() . '/sentry',
-			],
-			[
-				ConsistenceSentryExtension::CONTAINER_PARAMETER_GENERATED_CLASS_MAP_TARGET_FILE,
-				$this->getCacheDir() . '/sentry/_classMap.php',
-			],
-			[
-				ConsistenceSentryExtension::CONTAINER_PARAMETER_ANNOTATION_METHOD_ANNOTATIONS_MAP,
-				[
-					Add::class => 'add',
-					Contains::class => 'contains',
-					Get::class => 'get',
-					Remove::class => 'remove',
-					Set::class => 'set',
-				],
+				Add::class => 'add',
+				Contains::class => 'contains',
+				Get::class => 'get',
+				Remove::class => 'remove',
+				Set::class => 'set',
 			],
 		];
 	}

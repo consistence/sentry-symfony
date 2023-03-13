@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence\Sentry\SymfonyBundle\Annotation;
 
+use Generator;
 use PHPUnit\Framework\Assert;
 use ReflectionClass;
 use ReflectionProperty;
@@ -12,26 +13,24 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 {
 
 	/**
-	 * @return string[][]
+	 * @return string[][]|\Generator
 	 */
-	public function varAnnotationDataProvider(): array
+	public function varAnnotationDataProvider(): Generator
 	{
-		return [
-			['string'],
-			['integer'],
-			['null'],
-			['string|null'],
-			['int'],
-			['string|integer'],
-			['\Foo'],
-			['\Foo\Bar'],
-			['Foo'],
-			['\Foo|integer'],
-			['string[]'],
-			['\Foo[]'],
-			['Template<Foo>'],
-			['integer:string'],
-		];
+		yield ['string'];
+		yield ['integer'];
+		yield ['null'];
+		yield ['string|null'];
+		yield ['int'];
+		yield ['string|integer'];
+		yield ['\Foo'];
+		yield ['\Foo\Bar'];
+		yield ['Foo'];
+		yield ['\Foo|integer'];
+		yield ['string[]'];
+		yield ['\Foo[]'];
+		yield ['Template<Foo>'];
+		yield ['integer:string'];
 	}
 
 	/**
