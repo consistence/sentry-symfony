@@ -60,9 +60,16 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testSetNullToNotNullable(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
+		$invalidValue = null;
 
-		$foo->setName(null);
+		try {
+			$foo->setName($invalidValue);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame('null', $e->getValueType());
+			Assert::assertSame('string', $e->getExpectedTypes());
+		}
 	}
 
 	/**
@@ -105,10 +112,16 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testSetInvalidType(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('string expected');
+		$invalidValue = 1;
 
-		$foo->setName(1);
+		try {
+			$foo->setName($invalidValue);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame('int', $e->getValueType());
+			Assert::assertSame('string', $e->getExpectedTypes());
+		}
 	}
 
 	/**
@@ -141,10 +154,16 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testNullableSetInvalidType(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('string|null expected');
+		$invalidValue = 1;
 
-		$foo->setDescription(1);
+		try {
+			$foo->setDescription($invalidValue);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame('int', $e->getValueType());
+			Assert::assertSame('string|null', $e->getExpectedTypes());
+		}
 	}
 
 	/**

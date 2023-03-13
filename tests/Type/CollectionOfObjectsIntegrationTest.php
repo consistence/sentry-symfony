@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Consistence\Sentry\SymfonyBundle\Type;
 
 use DateTimeImmutable;
+use DateTimeInterface;
 use PHPUnit\Framework\Assert;
 use stdClass;
 
@@ -109,10 +110,17 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testSetInvalidCollectionType(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('array expected');
+		$invalidValue = new DateTimeImmutable();
+		$eventDates = $invalidValue;
 
-		$foo->setEventDates(new DateTimeImmutable());
+		try {
+			$foo->setEventDates($eventDates);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame(DateTimeImmutable::class, $e->getValueType());
+			Assert::assertSame('array', $e->getExpectedTypes());
+		}
 	}
 
 	/**
@@ -122,10 +130,17 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testSetInvalidItemType(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('DateTimeInterface expected');
+		$invalidValue = new stdClass();
+		$eventDates = [new DateTimeImmutable(), $invalidValue];
 
-		$foo->setEventDates([new DateTimeImmutable(), new stdClass()]);
+		try {
+			$foo->setEventDates($eventDates);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame(stdClass::class, $e->getValueType());
+			Assert::assertSame(DateTimeInterface::class, $e->getExpectedTypes());
+		}
 	}
 
 	/**
@@ -135,10 +150,17 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testSetNullValue(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('DateTimeInterface expected');
+		$invalidValue = null;
+		$eventDates = [new DateTimeImmutable(), $invalidValue];
 
-		$foo->setEventDates([new DateTimeImmutable(), null]);
+		try {
+			$foo->setEventDates($eventDates);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame('null', $e->getValueType());
+			Assert::assertSame(DateTimeInterface::class, $e->getExpectedTypes());
+		}
 	}
 
 	/**
@@ -148,10 +170,16 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testAddInvalidItemType(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('DateTimeInterface expected');
+		$invalidValue = new stdClass();
 
-		$foo->addEventDate(new stdClass());
+		try {
+			$foo->addEventDate($invalidValue);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame(stdClass::class, $e->getValueType());
+			Assert::assertSame(DateTimeInterface::class, $e->getExpectedTypes());
+		}
 	}
 
 	/**
@@ -161,10 +189,16 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testAddNull(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('DateTimeInterface expected');
+		$invalidValue = null;
 
-		$foo->addEventDate(null);
+		try {
+			$foo->addEventDate($invalidValue);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame('null', $e->getValueType());
+			Assert::assertSame(DateTimeInterface::class, $e->getExpectedTypes());
+		}
 	}
 
 	/**
@@ -174,10 +208,16 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testContainsInvalidItemType(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('DateTimeInterface expected');
+		$invalidValue = new stdClass();
 
-		$foo->containsEventDate(new stdClass());
+		try {
+			$foo->containsEventDate($invalidValue);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame(stdClass::class, $e->getValueType());
+			Assert::assertSame(DateTimeInterface::class, $e->getExpectedTypes());
+		}
 	}
 
 	/**
@@ -187,10 +227,16 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testRemoveInvalidItemType(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('DateTimeInterface expected');
+		$invalidValue = new stdClass();
 
-		$foo->removeEventDate(new stdClass());
+		try {
+			$foo->removeEventDate($invalidValue);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame(stdClass::class, $e->getValueType());
+			Assert::assertSame(DateTimeInterface::class, $e->getExpectedTypes());
+		}
 	}
 
 }

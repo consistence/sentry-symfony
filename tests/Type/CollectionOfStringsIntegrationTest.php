@@ -102,10 +102,17 @@ class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testSetInvalidCollectionType(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('array expected');
+		$invalidValue = 'Me';
+		$newValues = $invalidValue;
 
-		$foo->setAuthors('Me');
+		try {
+			$foo->setAuthors($newValues);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame('string', $e->getValueType());
+			Assert::assertSame('array', $e->getExpectedTypes());
+		}
 	}
 
 	/**
@@ -115,10 +122,17 @@ class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testSetInvalidItemType(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('string expected');
+		$invalidValue = 1;
+		$newValues = ['Me', $invalidValue];
 
-		$foo->setAuthors(['Me', 1]);
+		try {
+			$foo->setAuthors($newValues);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame('int', $e->getValueType());
+			Assert::assertSame('string', $e->getExpectedTypes());
+		}
 	}
 
 	/**
@@ -128,10 +142,17 @@ class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testSetNullValue(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('string expected');
+		$invalidValue = null;
+		$newValues = ['Me', $invalidValue];
 
-		$foo->setAuthors(['Me', null]);
+		try {
+			$foo->setAuthors($newValues);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame('null', $e->getValueType());
+			Assert::assertSame('string', $e->getExpectedTypes());
+		}
 	}
 
 	/**
@@ -141,10 +162,16 @@ class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testAddInvalidItemType(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('string expected');
+		$invalidValue = 1;
 
-		$foo->addAuthor(1);
+		try {
+			$foo->addAuthor($invalidValue);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame('int', $e->getValueType());
+			Assert::assertSame('string', $e->getExpectedTypes());
+		}
 	}
 
 	/**
@@ -154,10 +181,16 @@ class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testAddNull(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('string expected');
+		$invalidValue = null;
 
-		$foo->addAuthor(null);
+		try {
+			$foo->addAuthor($invalidValue);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame('null', $e->getValueType());
+			Assert::assertSame('string', $e->getExpectedTypes());
+		}
 	}
 
 	/**
@@ -167,10 +200,16 @@ class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testContainsInvalidItemType(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('string expected');
+		$invalidValue = 1;
 
-		$foo->containsAuthor(1);
+		try {
+			$foo->containsAuthor($invalidValue);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame('int', $e->getValueType());
+			Assert::assertSame('string', $e->getExpectedTypes());
+		}
 	}
 
 	/**
@@ -180,10 +219,16 @@ class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testRemoveInvalidItemType(Foo $foo): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('string expected');
+		$invalidValue = 1;
 
-		$foo->removeAuthor(1);
+		try {
+			$foo->removeAuthor($invalidValue);
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($invalidValue, $e->getValue());
+			Assert::assertSame('int', $e->getValueType());
+			Assert::assertSame('string', $e->getExpectedTypes());
+		}
 	}
 
 }
