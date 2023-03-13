@@ -6,6 +6,7 @@ namespace Consistence\Sentry\SymfonyBundle\Type;
 
 use DateTime;
 use DateTimeImmutable;
+use PHPUnit\Framework\Assert;
 
 class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 {
@@ -30,7 +31,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testGetUninitialized(Foo $foo): void
 	{
-		$this->assertNull($foo->getPublishDate());
+		Assert::assertNull($foo->getPublishDate());
 	}
 
 	/**
@@ -42,7 +43,7 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	{
 		$publishDate = new DateTimeImmutable();
 		$foo->setPublishDate($publishDate);
-		$this->assertSame($publishDate, $foo->getPublishDate());
+		Assert::assertSame($publishDate, $foo->getPublishDate());
 	}
 
 	/**
@@ -119,11 +120,11 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	{
 		$immutable = new DateTimeImmutable();
 		$foo->setDateTimeInterface($immutable);
-		$this->assertSame($immutable, $foo->getDateTimeInterface());
+		Assert::assertSame($immutable, $foo->getDateTimeInterface());
 
 		$mutable = new DateTime();
 		$foo->setDateTimeInterface($mutable);
-		$this->assertSame($mutable, $foo->getDateTimeInterface());
+		Assert::assertSame($mutable, $foo->getDateTimeInterface());
 	}
 
 }

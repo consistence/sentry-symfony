@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Consistence\Sentry\SymfonyBundle\Type;
 
 use DateTimeImmutable;
+use PHPUnit\Framework\Assert;
 use stdClass;
 
 class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
@@ -30,7 +31,7 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testGetEmpty(Foo $foo): void
 	{
-		$this->assertEmpty($foo->getEventDates());
+		Assert::assertEmpty($foo->getEventDates());
 	}
 
 	/**
@@ -45,7 +46,7 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 			new DateTimeImmutable('tomorrow'),
 		];
 		$foo->setEventDates($eventDates);
-		$this->assertEquals($eventDates, $foo->getEventDates());
+		Assert::assertEquals($eventDates, $foo->getEventDates());
 	}
 
 	/**
@@ -57,7 +58,7 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	{
 		$date = new DateTimeImmutable();
 		$foo->addEventDate($date);
-		$this->assertContains($date, $foo->getEventDates());
+		Assert::assertContains($date, $foo->getEventDates());
 	}
 
 	/**
@@ -75,9 +76,9 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 		];
 		$foo->setEventDates($dates);
 
-		$this->assertTrue($foo->containsEventDate($today));
-		$this->assertTrue($foo->containsEventDate($tomorrow));
-		$this->assertFalse($foo->containsEventDate(new DateTimeImmutable()));
+		Assert::assertTrue($foo->containsEventDate($today));
+		Assert::assertTrue($foo->containsEventDate($tomorrow));
+		Assert::assertFalse($foo->containsEventDate(new DateTimeImmutable()));
 	}
 
 	/**
@@ -97,8 +98,8 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 
 		$foo->removeEventDate($today);
 
-		$this->assertFalse($foo->containsEventDate($today));
-		$this->assertTrue($foo->containsEventDate($tomorrow));
+		Assert::assertFalse($foo->containsEventDate($today));
+		Assert::assertTrue($foo->containsEventDate($tomorrow));
 	}
 
 	/**

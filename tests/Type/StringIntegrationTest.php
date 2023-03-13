@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Consistence\Sentry\SymfonyBundle\Type;
 
+use PHPUnit\Framework\Assert;
+
 class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
@@ -27,7 +29,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testGet(Foo $foo): void
 	{
-		$this->assertSame('testName', $foo->getName());
+		Assert::assertSame('testName', $foo->getName());
 	}
 
 	/**
@@ -37,7 +39,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testGetUninitializedString(Foo $foo): void
 	{
-		$this->assertNull($foo->getDescription());
+		Assert::assertNull($foo->getDescription());
 	}
 
 	/**
@@ -48,7 +50,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	public function testSet(Foo $foo): void
 	{
 		$foo->setName('fooBar');
-		$this->assertSame('fooBar', $foo->getName());
+		Assert::assertSame('fooBar', $foo->getName());
 	}
 
 	/**
@@ -71,7 +73,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	public function testSetEmptyString(Foo $foo): void
 	{
 		$foo->setName('');
-		$this->assertSame('', $foo->getName());
+		Assert::assertSame('', $foo->getName());
 	}
 
 	/**
@@ -82,7 +84,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	public function testSetStringZero(Foo $foo): void
 	{
 		$foo->setName('0');
-		$this->assertSame('0', $foo->getName());
+		Assert::assertSame('0', $foo->getName());
 	}
 
 	/**
@@ -93,7 +95,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	public function testSetWhitespaceString(Foo $foo): void
 	{
 		$foo->setName('    ');
-		$this->assertSame('    ', $foo->getName());
+		Assert::assertSame('    ', $foo->getName());
 	}
 
 	/**
@@ -117,7 +119,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	public function testNullableSetEmptyString(Foo $foo): void
 	{
 		$foo->setDescription('');
-		$this->assertSame('', $foo->getDescription());
+		Assert::assertSame('', $foo->getDescription());
 	}
 
 	/**
@@ -129,7 +131,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	public function testNullableSetWhitespaceString(Foo $foo): void
 	{
 		$foo->setDescription('    ');
-		$this->assertSame('    ', $foo->getDescription());
+		Assert::assertSame('    ', $foo->getDescription());
 	}
 
 	/**
@@ -153,7 +155,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	public function testCustomNameGetAndSet(Foo $foo): void
 	{
 		$foo->setMy('foo');
-		$this->assertSame('foo', $foo->getMy());
+		Assert::assertSame('foo', $foo->getMy());
 	}
 
 	/**
@@ -164,7 +166,7 @@ class StringIntegrationTest extends \PHPUnit\Framework\TestCase
 	public function testCallPrivateFromPublic(Foo $foo): void
 	{
 		$foo->setPublic('foo');
-		$this->assertSame('foo', $foo->getPrivate());
+		Assert::assertSame('foo', $foo->getPrivate());
 	}
 
 }

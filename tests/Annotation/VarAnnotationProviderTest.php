@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence\Sentry\SymfonyBundle\Annotation;
 
+use PHPUnit\Framework\Assert;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -51,7 +52,7 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 			->getMock();
 
 		$property
-			->expects($this->once())
+			->expects(self::once())
 			->method('getDocComment')
 			->willReturn($docComment);
 
@@ -59,9 +60,9 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 
 		$annotation = $varAnnotationProvider->getPropertyAnnotation($property, 'var');
 
-		$this->assertSame('var', $annotation->getName());
-		$this->assertSame($value, $annotation->getValue());
-		$this->assertEmpty($annotation->getFields());
+		Assert::assertSame('var', $annotation->getName());
+		Assert::assertSame($value, $annotation->getValue());
+		Assert::assertEmpty($annotation->getFields());
 	}
 
 	/**
@@ -79,7 +80,7 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 			->getMock();
 
 		$property
-			->expects($this->once())
+			->expects(self::once())
 			->method('getDocComment')
 			->willReturn($docComment);
 
@@ -87,9 +88,9 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 
 		$annotation = $varAnnotationProvider->getPropertyAnnotation($property, 'var');
 
-		$this->assertSame('var', $annotation->getName());
-		$this->assertSame($value, $annotation->getValue());
-		$this->assertEmpty($annotation->getFields());
+		Assert::assertSame('var', $annotation->getName());
+		Assert::assertSame($value, $annotation->getValue());
+		Assert::assertEmpty($annotation->getFields());
 	}
 
 	public function testVarAnnotationDoesNotExist(): void
@@ -105,17 +106,17 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 				->getMock();
 
 			$property
-				->expects($this->once())
+				->expects(self::once())
 				->method('getDocComment')
 				->willReturn($docComment);
 
 			$property
-				->expects($this->any())
+				->expects(self::any())
 				->method('getDeclaringClass')
 				->willReturn(new ReflectionClass(Foo::class));
 
 			$property
-				->expects($this->any())
+				->expects(self::any())
 				->method('getName')
 				->willReturn('test');
 
@@ -123,11 +124,11 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 
 			$varAnnotationProvider->getPropertyAnnotation($property, 'var');
 
-			$this->fail();
+			Assert::fail();
 
 		} catch (\Consistence\Annotation\AnnotationNotFoundException $e) {
-			$this->assertSame($property, $e->getProperty());
-			$this->assertSame('var', $e->getAnnotationName());
+			Assert::assertSame($property, $e->getProperty());
+			Assert::assertSame('var', $e->getAnnotationName());
 		}
 	}
 
@@ -144,17 +145,17 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 				->getMock();
 
 			$property
-				->expects($this->once())
+				->expects(self::once())
 				->method('getDocComment')
 				->willReturn($docComment);
 
 			$property
-				->expects($this->any())
+				->expects(self::any())
 				->method('getDeclaringClass')
 				->willReturn(new ReflectionClass(Foo::class));
 
 			$property
-				->expects($this->any())
+				->expects(self::any())
 				->method('getName')
 				->willReturn('test');
 
@@ -162,11 +163,11 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 
 			$varAnnotationProvider->getPropertyAnnotation($property, 'var');
 
-			$this->fail();
+			Assert::fail();
 
 		} catch (\Consistence\Annotation\AnnotationNotFoundException $e) {
-			$this->assertSame($property, $e->getProperty());
-			$this->assertSame('var', $e->getAnnotationName());
+			Assert::assertSame($property, $e->getProperty());
+			Assert::assertSame('var', $e->getAnnotationName());
 		}
 	}
 
@@ -179,12 +180,12 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 				->getMock();
 
 			$property
-				->expects($this->any())
+				->expects(self::any())
 				->method('getDeclaringClass')
 				->willReturn(new ReflectionClass(Foo::class));
 
 			$property
-				->expects($this->any())
+				->expects(self::any())
 				->method('getName')
 				->willReturn('test');
 
@@ -192,11 +193,11 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 
 			$varAnnotationProvider->getPropertyAnnotation($property, 'author');
 
-			$this->fail();
+			Assert::fail();
 
 		} catch (\Consistence\Annotation\AnnotationNotFoundException $e) {
-			$this->assertSame($property, $e->getProperty());
-			$this->assertSame('author', $e->getAnnotationName());
+			Assert::assertSame($property, $e->getProperty());
+			Assert::assertSame('author', $e->getAnnotationName());
 		}
 	}
 
@@ -208,12 +209,12 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 			->getMock();
 
 		$property
-			->expects($this->never())
+			->expects(self::never())
 			->method('getDocComment');
 
 		$varAnnotationProvider = new VarAnnotationProvider();
 
-		$this->assertEmpty($varAnnotationProvider->getPropertyAnnotations($property, 'var'));
+		Assert::assertEmpty($varAnnotationProvider->getPropertyAnnotations($property, 'var'));
 	}
 
 }
