@@ -31,7 +31,7 @@ class CollectionOfObjectsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testGetEmpty(Foo $foo): void
 	{
-		Assert::assertEmpty($foo->getEventDates());
+		Assert::assertCount(0, $foo->getEventDates());
 	}
 
 	/**

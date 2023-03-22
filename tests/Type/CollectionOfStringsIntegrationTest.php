@@ -29,7 +29,7 @@ class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testGetEmpty(Foo $foo): void
 	{
-		Assert::assertEmpty($foo->getAuthors());
+		Assert::assertCount(0, $foo->getAuthors());
 	}
 
 	/**

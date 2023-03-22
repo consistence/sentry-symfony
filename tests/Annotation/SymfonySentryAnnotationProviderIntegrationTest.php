@@ -22,7 +22,7 @@ class SymfonySentryAnnotationProviderIntegrationTest extends \PHPUnit\Framework\
 		Assert::assertInstanceOf(Annotation::class, $annotation);
 		Assert::assertSame('get', $annotation->getName());
 		Assert::assertNull($annotation->getValue());
-		Assert::assertEmpty($annotation->getFields());
+		Assert::assertCount(0, $annotation->getFields());
 	}
 
 	public function testGetAnnotationWithFields(): void
@@ -64,7 +64,7 @@ class SymfonySentryAnnotationProviderIntegrationTest extends \PHPUnit\Framework\
 		Assert::assertInstanceOf(Annotation::class, $annotations[0]);
 		Assert::assertSame('get', $annotations[0]->getName());
 		Assert::assertNull($annotations[0]->getValue());
-		Assert::assertEmpty($annotations[0]->getFields());
+		Assert::assertCount(0, $annotations[0]->getFields());
 		Assert::assertInstanceOf(Annotation::class, $annotations[1]);
 		Assert::assertSame('get', $annotations[1]->getName());
 		Assert::assertNull($annotations[1]->getValue());
@@ -80,7 +80,7 @@ class SymfonySentryAnnotationProviderIntegrationTest extends \PHPUnit\Framework\
 		$annotationProvider = $this->createAnnotationProvider();
 		$property = new ReflectionProperty(Foo::class, 'noParams');
 
-		Assert::assertEmpty($annotationProvider->getPropertyAnnotations($property, 'foo'));
+		Assert::assertCount(0, $annotationProvider->getPropertyAnnotations($property, 'foo'));
 	}
 
 	public function testUnstructuredAnnotation(): void
@@ -92,7 +92,7 @@ class SymfonySentryAnnotationProviderIntegrationTest extends \PHPUnit\Framework\
 		Assert::assertInstanceOf(Annotation::class, $annotation);
 		Assert::assertSame('var', $annotation->getName());
 		Assert::assertSame('string', $annotation->getValue());
-		Assert::assertEmpty($annotation->getFields());
+		Assert::assertCount(0, $annotation->getFields());
 	}
 
 	private function createAnnotationProvider(): DoctrineSentryAnnotationProvider

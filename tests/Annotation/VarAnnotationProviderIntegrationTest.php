@@ -21,7 +21,7 @@ class VarAnnotationProviderIntegrationTest extends \PHPUnit\Framework\TestCase
 
 		Assert::assertSame('var', $annotation->getName());
 		Assert::assertSame('string', $annotation->getValue());
-		Assert::assertEmpty($annotation->getFields());
+		Assert::assertCount(0, $annotation->getFields());
 	}
 
 	public function testVarAnnotationDoesNotExist(): void
