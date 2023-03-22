@@ -62,7 +62,7 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 
 		Assert::assertSame('var', $annotation->getName());
 		Assert::assertSame($value, $annotation->getValue());
-		Assert::assertEmpty($annotation->getFields());
+		Assert::assertCount(0, $annotation->getFields());
 	}
 
 	/**
@@ -90,7 +90,7 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 
 		Assert::assertSame('var', $annotation->getName());
 		Assert::assertSame($value, $annotation->getValue());
-		Assert::assertEmpty($annotation->getFields());
+		Assert::assertCount(0, $annotation->getFields());
 	}
 
 	public function testVarAnnotationDoesNotExist(): void
@@ -214,7 +214,7 @@ class VarAnnotationProviderTest extends \PHPUnit\Framework\TestCase
 
 		$varAnnotationProvider = new VarAnnotationProvider();
 
-		Assert::assertEmpty($varAnnotationProvider->getPropertyAnnotations($property, 'var'));
+		Assert::assertCount(0, $varAnnotationProvider->getPropertyAnnotations($property, 'var'));
 	}
 
 }
