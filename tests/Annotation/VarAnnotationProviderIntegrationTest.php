@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Consistence\Sentry\SymfonyBundle\Annotation;
 
+use PHPUnit\Framework\Assert;
 use ReflectionProperty;
 
 class VarAnnotationProviderIntegrationTest extends \PHPUnit\Framework\TestCase
@@ -18,9 +19,9 @@ class VarAnnotationProviderIntegrationTest extends \PHPUnit\Framework\TestCase
 			'noParams'
 		), 'var');
 
-		$this->assertSame('var', $annotation->getName());
-		$this->assertSame('string', $annotation->getValue());
-		$this->assertEmpty($annotation->getFields());
+		Assert::assertSame('var', $annotation->getName());
+		Assert::assertSame('string', $annotation->getValue());
+		Assert::assertCount(0, $annotation->getFields());
 	}
 
 	public function testVarAnnotationDoesNotExist(): void
@@ -33,12 +34,12 @@ class VarAnnotationProviderIntegrationTest extends \PHPUnit\Framework\TestCase
 				'withoutVar'
 			), 'var');
 
-			$this->fail();
+			Assert::fail('Exception expected');
 
 		} catch (\Consistence\Annotation\AnnotationNotFoundException $e) {
-			$this->assertSame(Foo::class, $e->getProperty()->getDeclaringClass()->getName());
-			$this->assertSame('withoutVar', $e->getProperty()->getName());
-			$this->assertSame('var', $e->getAnnotationName());
+			Assert::assertSame(Foo::class, $e->getProperty()->getDeclaringClass()->getName());
+			Assert::assertSame('withoutVar', $e->getProperty()->getName());
+			Assert::assertSame('var', $e->getAnnotationName());
 		}
 	}
 
