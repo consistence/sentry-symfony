@@ -4,37 +4,42 @@ declare(strict_types = 1);
 
 namespace Consistence\Sentry\SymfonyBundle\Type;
 
+use Closure;
 use DateTime;
 use DateTimeImmutable;
+use Generator;
+use PHPUnit\Framework\Assert;
 
 class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
 	/**
-	 * @return \Consistence\Sentry\SymfonyBundle\Type\Foo[][]
+	 * @return \Consistence\Sentry\SymfonyBundle\Type\Foo[][]|\Generator
 	 */
-	public function fooProvider(): array
+	public function fooDataProvider(): Generator
 	{
-		$generator = new SentryDataGenerator();
-		$generator->generate('Foo');
+		yield 'instance of generated class' => (function (): array {
+			$generator = new SentryDataGenerator();
+			$generator->generate('Foo');
 
-		return [
-			[new FooGenerated()],
-		];
+			return [
+				'foo' => new FooGenerated(),
+			];
+		})();
 	}
 
 	/**
-	 * @dataProvider fooProvider
+	 * @dataProvider fooDataProvider
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
 	public function testGetUninitialized(Foo $foo): void
 	{
-		$this->assertNull($foo->getPublishDate());
+		Assert::assertNull($foo->getPublishDate());
 	}
 
 	/**
-	 * @dataProvider fooProvider
+	 * @dataProvider fooDataProvider
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
@@ -42,76 +47,97 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	{
 		$publishDate = new DateTimeImmutable();
 		$foo->setPublishDate($publishDate);
-		$this->assertSame($publishDate, $foo->getPublishDate());
+		Assert::assertSame($publishDate, $foo->getPublishDate());
 	}
 
 	/**
-	 * @dataProvider fooProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
+	 * @return mixed[][]|\Generator
 	 */
-	public function testSetNullToNotNullable(Foo $foo): void
+	public function invalidArgumentTypeDataProvider(): Generator
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('DateTimeImmutable expected');
+		foreach ($this->fooDataProvider() as $caseName => $caseData) {
+			yield $caseName . ' - set not nullable with null value' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->setCreatedDate(null);
+				},
+				'expectedInvalidValue' => null,
+				'expectedInvalidValueType' => 'null',
+				'expectedExpectedTypes' => DateTimeImmutable::class,
+			];
 
-		$foo->setCreatedDate(null);
+			yield $caseName . ' - set not nullable with scalar type' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->setCreatedDate(1);
+				},
+				'expectedInvalidValue' => 1,
+				'expectedInvalidValueType' => 'int',
+				'expectedExpectedTypes' => DateTimeImmutable::class,
+			];
+
+			yield $caseName . ' - set not nullable with invalid type' => (function () use ($caseData): array {
+				$invalidValue = new DateTime();
+
+				return [
+					'callMethodCallback' => function () use ($caseData, $invalidValue): void {
+						$caseData['foo']->setCreatedDate($invalidValue);
+					},
+					'expectedInvalidValue' => $invalidValue,
+					'expectedInvalidValueType' => DateTime::class,
+					'expectedExpectedTypes' => DateTimeImmutable::class,
+				];
+			})();
+
+			yield $caseName . ' - set nullable with scalar type' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->setPublishDate(1);
+				},
+				'expectedInvalidValue' => 1,
+				'expectedInvalidValueType' => 'int',
+				'expectedExpectedTypes' => sprintf('%s|null', DateTimeImmutable::class),
+			];
+
+			yield $caseName . ' - set nullable with invalid type' => (function () use ($caseData): array {
+				$invalidValue = new DateTime();
+
+				return [
+					'callMethodCallback' => function () use ($caseData, $invalidValue): void {
+						$caseData['foo']->setPublishDate($invalidValue);
+					},
+					'expectedInvalidValue' => $invalidValue,
+					'expectedInvalidValueType' => DateTime::class,
+					'expectedExpectedTypes' => sprintf('%s|null', DateTimeImmutable::class),
+				];
+			})();
+		}
 	}
 
 	/**
-	 * @dataProvider fooProvider
+	 * @dataProvider invalidArgumentTypeDataProvider
 	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
+	 * @param \Closure $callMethodCallback
+	 * @param mixed $expectedInvalidValue
+	 * @param string $expectedInvalidValueType
+	 * @param string $expectedExpectedTypes
 	 */
-	public function testSetScalarType(Foo $foo): void
+	public function testCallMethodWithInvalidArgumentType(
+		Closure $callMethodCallback,
+		$expectedInvalidValue,
+		string $expectedInvalidValueType,
+		string $expectedExpectedTypes
+	): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('DateTimeImmutable expected');
-
-		$foo->setCreatedDate(1);
+		try {
+			$callMethodCallback();
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($expectedInvalidValue, $e->getValue());
+			Assert::assertSame($expectedInvalidValueType, $e->getValueType());
+			Assert::assertSame($expectedExpectedTypes, $e->getExpectedTypes());
+		}
 	}
 
 	/**
-	 * @dataProvider fooProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
-	 */
-	public function testSetInvalidType(Foo $foo): void
-	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('DateTimeImmutable expected');
-
-		$foo->setCreatedDate(new DateTime());
-	}
-
-	/**
-	 * @dataProvider fooProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
-	 */
-	public function testNullableSetScalarType(Foo $foo): void
-	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('DateTimeImmutable|null expected');
-
-		$foo->setPublishDate(1);
-	}
-
-	/**
-	 * @dataProvider fooProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
-	 */
-	public function testNullableSetInvalidType(Foo $foo): void
-	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('DateTimeImmutable|null expected');
-
-		$foo->setPublishDate(new DateTime());
-	}
-
-	/**
-	 * @dataProvider fooProvider
+	 * @dataProvider fooDataProvider
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
@@ -119,11 +145,11 @@ class ObjectIntegrationTest extends \PHPUnit\Framework\TestCase
 	{
 		$immutable = new DateTimeImmutable();
 		$foo->setDateTimeInterface($immutable);
-		$this->assertSame($immutable, $foo->getDateTimeInterface());
+		Assert::assertSame($immutable, $foo->getDateTimeInterface());
 
 		$mutable = new DateTime();
 		$foo->setDateTimeInterface($mutable);
-		$this->assertSame($mutable, $foo->getDateTimeInterface());
+		Assert::assertSame($mutable, $foo->getDateTimeInterface());
 	}
 
 }

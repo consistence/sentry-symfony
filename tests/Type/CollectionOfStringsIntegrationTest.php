@@ -4,34 +4,40 @@ declare(strict_types = 1);
 
 namespace Consistence\Sentry\SymfonyBundle\Type;
 
+use Closure;
+use Generator;
+use PHPUnit\Framework\Assert;
+
 class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 {
 
 	/**
-	 * @return \Consistence\Sentry\SymfonyBundle\Type\Foo[][]
+	 * @return \Consistence\Sentry\SymfonyBundle\Type\Foo[][]|\Generator
 	 */
-	public function fooProvider(): array
+	public function fooDataProvider(): Generator
 	{
-		$generator = new SentryDataGenerator();
-		$generator->generate('Foo');
+		yield 'instance of generated class' => (function (): array {
+			$generator = new SentryDataGenerator();
+			$generator->generate('Foo');
 
-		return [
-			[new FooGenerated()],
-		];
+			return [
+				'foo' => new FooGenerated(),
+			];
+		})();
 	}
 
 	/**
-	 * @dataProvider fooProvider
+	 * @dataProvider fooDataProvider
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
 	public function testGetEmpty(Foo $foo): void
 	{
-		$this->assertEmpty($foo->getAuthors());
+		Assert::assertCount(0, $foo->getAuthors());
 	}
 
 	/**
-	 * @dataProvider fooProvider
+	 * @dataProvider fooDataProvider
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
@@ -42,22 +48,22 @@ class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 			'Myself',
 		];
 		$foo->setAuthors($authors);
-		$this->assertEquals($authors, $foo->getAuthors());
+		Assert::assertEquals($authors, $foo->getAuthors());
 	}
 
 	/**
-	 * @dataProvider fooProvider
+	 * @dataProvider fooDataProvider
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
 	public function testAdd(Foo $foo): void
 	{
 		$foo->addAuthor('Irene');
-		$this->assertContains('Irene', $foo->getAuthors());
+		Assert::assertContains('Irene', $foo->getAuthors());
 	}
 
 	/**
-	 * @dataProvider fooProvider
+	 * @dataProvider fooDataProvider
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
@@ -69,13 +75,13 @@ class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 		];
 		$foo->setAuthors($authors);
 
-		$this->assertTrue($foo->containsAuthor('Me'));
-		$this->assertTrue($foo->containsAuthor('Myself'));
-		$this->assertFalse($foo->containsAuthor('Irene'));
+		Assert::assertTrue($foo->containsAuthor('Me'));
+		Assert::assertTrue($foo->containsAuthor('Myself'));
+		Assert::assertFalse($foo->containsAuthor('Irene'));
 	}
 
 	/**
-	 * @dataProvider fooProvider
+	 * @dataProvider fooDataProvider
 	 *
 	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
 	 */
@@ -89,99 +95,122 @@ class CollectionOfStringsIntegrationTest extends \PHPUnit\Framework\TestCase
 
 		$foo->removeAuthor('Me');
 
-		$this->assertFalse($foo->containsAuthor('Me'));
-		$this->assertTrue($foo->containsAuthor('Myself'));
+		Assert::assertFalse($foo->containsAuthor('Me'));
+		Assert::assertTrue($foo->containsAuthor('Myself'));
 	}
 
 	/**
-	 * @dataProvider fooProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
+	 * @return mixed[][]|\Generator
 	 */
-	public function testSetInvalidCollectionType(Foo $foo): void
+	public function invalidArgumentTypeDataProvider(): Generator
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('array expected');
+		foreach ($this->fooDataProvider() as $caseName => $caseData) {
+			yield $caseName . ' - setAuthors() with invalid collection type' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->setAuthors('Me');
+				},
+				'expectedInvalidValue' => 'Me',
+				'expectedInvalidValueType' => 'string',
+				'expectedExpectedTypes' => 'array',
+			];
 
-		$foo->setAuthors('Me');
+			yield $caseName . ' - setAuthors() with invalid item type' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->setAuthors(['Me', 1]);
+				},
+				'expectedInvalidValue' => 1,
+				'expectedInvalidValueType' => 'int',
+				'expectedExpectedTypes' => 'string',
+			];
+
+			yield $caseName . ' - setAuthors() with null value' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->setAuthors(['Me', null]);
+				},
+				'expectedInvalidValue' => null,
+				'expectedInvalidValueType' => 'null',
+				'expectedExpectedTypes' => 'string',
+			];
+
+			yield $caseName . ' - addAuthor() with invalid item type' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->addAuthor(1);
+				},
+				'expectedInvalidValue' => 1,
+				'expectedInvalidValueType' => 'int',
+				'expectedExpectedTypes' => 'string',
+			];
+
+			yield $caseName . ' - addAuthor() with null value' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->addAuthor(null);
+				},
+				'expectedInvalidValue' => null,
+				'expectedInvalidValueType' => 'null',
+				'expectedExpectedTypes' => 'string',
+			];
+
+			yield $caseName . ' - containsAuthor() with invalid item type' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->containsAuthor(1);
+				},
+				'expectedInvalidValue' => 1,
+				'expectedInvalidValueType' => 'int',
+				'expectedExpectedTypes' => 'string',
+			];
+
+			yield $caseName . ' - containsAuthor() with null value' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->containsAuthor(null);
+				},
+				'expectedInvalidValue' => null,
+				'expectedInvalidValueType' => 'null',
+				'expectedExpectedTypes' => 'string',
+			];
+
+			yield $caseName . ' - removeAuthor() with invalid item type' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->removeAuthor(1);
+				},
+				'expectedInvalidValue' => 1,
+				'expectedInvalidValueType' => 'int',
+				'expectedExpectedTypes' => 'string',
+			];
+
+			yield $caseName . ' - removeAuthor() with null value' => [
+				'callMethodCallback' => function () use ($caseData): void {
+					$caseData['foo']->removeAuthor(null);
+				},
+				'expectedInvalidValue' => null,
+				'expectedInvalidValueType' => 'null',
+				'expectedExpectedTypes' => 'string',
+			];
+		}
 	}
 
 	/**
-	 * @dataProvider fooProvider
+	 * @dataProvider invalidArgumentTypeDataProvider
 	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
+	 * @param \Closure $callMethodCallback
+	 * @param mixed $expectedInvalidValue
+	 * @param string $expectedInvalidValueType
+	 * @param string $expectedExpectedTypes
 	 */
-	public function testSetInvalidItemType(Foo $foo): void
+	public function testCallMethodWithInvalidArgumentType(
+		Closure $callMethodCallback,
+		$expectedInvalidValue,
+		string $expectedInvalidValueType,
+		string $expectedExpectedTypes
+	): void
 	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('string expected');
-
-		$foo->setAuthors(['Me', 1]);
-	}
-
-	/**
-	 * @dataProvider fooProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
-	 */
-	public function testSetNullValue(Foo $foo): void
-	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('string expected');
-
-		$foo->setAuthors(['Me', null]);
-	}
-
-	/**
-	 * @dataProvider fooProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
-	 */
-	public function testAddInvalidItemType(Foo $foo): void
-	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('string expected');
-
-		$foo->addAuthor(1);
-	}
-
-	/**
-	 * @dataProvider fooProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
-	 */
-	public function testAddNull(Foo $foo): void
-	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('string expected');
-
-		$foo->addAuthor(null);
-	}
-
-	/**
-	 * @dataProvider fooProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
-	 */
-	public function testContainsInvalidItemType(Foo $foo): void
-	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('string expected');
-
-		$foo->containsAuthor(1);
-	}
-
-	/**
-	 * @dataProvider fooProvider
-	 *
-	 * @param \Consistence\Sentry\SymfonyBundle\Type\Foo $foo
-	 */
-	public function testRemoveInvalidItemType(Foo $foo): void
-	{
-		$this->expectException(\Consistence\InvalidArgumentTypeException::class);
-		$this->expectExceptionMessage('string expected');
-
-		$foo->removeAuthor(1);
+		try {
+			$callMethodCallback();
+			Assert::fail('Exception expected');
+		} catch (\Consistence\InvalidArgumentTypeException $e) {
+			Assert::assertSame($expectedInvalidValue, $e->getValue());
+			Assert::assertSame($expectedInvalidValueType, $e->getValueType());
+			Assert::assertSame($expectedExpectedTypes, $e->getExpectedTypes());
+		}
 	}
 
 }
